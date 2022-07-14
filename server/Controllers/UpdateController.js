@@ -17,6 +17,7 @@ const update = function (app) {
   app.put("/api/update/:id", (request, response) => {
     const { id } = request.params
     const { username, email, password, usergroup } = request.body
+    console.log(request.body)
     const sqlUpdate = "UPDATE taskmanagement_db SET username = ?, email = ?, password = ?, usergroup = ? WHERE id = ?"
     connection.query(sqlUpdate, [username, email, password, usergroup, id], (error, result) => {
       if (error) {

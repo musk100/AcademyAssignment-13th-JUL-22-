@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react"
-import Select from "react-select"
-import { useNavigate, useParams, Link } from "react-router-dom"
+import React, { useState } from "react"
+import CreatableSelect from "react-select/creatable"
+import { useNavigate, Link } from "react-router-dom"
 import "./AddUser.module.css"
 import axios from "axios"
-import { toast, ToastContainer } from "react-toastify"
+import { toast } from "react-toastify"
 import makeAnimated from "react-select/animated"
 import Header from ".//Header"
 
@@ -15,23 +15,27 @@ const initialState = {
 }
 
 const AddEdit = () => {
-  const animatedComponenets = makeAnimated()
+  const animatedComponents = makeAnimated()
   const Groups = [
     {
       label: "Admin",
-      value: "admin"
+      value: "admin",
+      color: "#FF8B00"
     },
     {
       label: "Project Lead",
-      value: "projectlead"
+      value: "projectlead",
+      color: "#36B37E"
     },
     {
       label: "Project Manager",
-      value: "projectmanager"
+      value: "projectmanager",
+      color: "#0052CC"
     },
     {
       label: "Team Member",
-      value: "teammember"
+      value: "teammember",
+      color: "black"
     }
   ]
 
@@ -41,9 +45,23 @@ const AddEdit = () => {
   const [password, setPassword] = useState("")
   const [usergroup, setUserGroup] = useState("")
 
+  // const loadOptions = (searchValue, callback) => {
+  //   setTimeout(() => {
+  //     const filteredOptions = Groups.filter(option => option.label.toLowerCase().includes(searchValue.toLowerCase()))
+  //     console.log("loadOptions", searchValue, filteredOptions)
+  //     callback(filteredOptions)
+  //   }, 500)
+  // }
+
   const navigate = useNavigate()
 
-  const { id } = useParams()
+  const handleChange = (selectedOption, actionMeta) => {
+    console.log("handleChange", selectedOption, actionMeta)
+  }
+
+  const handleInputChange = (inputValue, actionMeta) => {
+    console.log("handleInputChange", inputValue, actionMeta)
+  }
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -66,8 +84,37 @@ const AddEdit = () => {
     setTimeout(() => navigate("/mainmenu"), 500)
   }
 
-  const handleChange = e => {
-    setState({ value: e.target.value })
+  const colorStyles = {
+    control: styles => ({ ...styles, backgroundColor: "white" }),
+    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
+      console.log("option", data, isFocused, isSelected, isDisabled)
+      return { ...styles, color: data.color }
+    },
+    multiValue: (styles, { data }) => {
+      return {
+        ...styles,
+        backgroundColor: data.color,
+        color: "#fff"
+      }
+    },
+
+    multiValueLabel: (styles, { data }) => {
+      return {
+        ...styles,
+        color: "#fff"
+      }
+    },
+
+    multiValueRemove: (styles, { data }) => {
+      return {
+        ...styles,
+        color: "#fff",
+        cursor: "pointer",
+        ":hover": {
+          color: "#fff"
+        }
+      }
+    }
   }
 
   return (
@@ -120,12 +167,10 @@ const AddEdit = () => {
               setPassword(event.target.value)
             }}
           />
-          <div className="col-md-6">
-            <label htmlFor="usergroup">
-              User Group
-              <Select options={Groups} components={animatedComponenets} isMulti />
-            </label>
-          </div>
+          <label htmlFor="usergroup">
+            User Group
+            <CreatableSelect styles={colorStyles} components={animatedComponents} onChange={handleChange} options={Groups} onInputChange={handleInputChange} isMulti />
+          </label>
           {/* value type="text" id="usergroup" name="usergroup" placeholder="User Group ..." value={usergroup || ""}
           onChange=
           {event => {

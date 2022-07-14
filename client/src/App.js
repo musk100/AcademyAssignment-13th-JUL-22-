@@ -6,7 +6,6 @@ import AddEdit from "./pages/AddUser"
 import Home from "./pages/Home"
 import AdminLogin from "./pages/AdminLogin"
 import View from "./pages/View"
-import EditUser from "./pages/EditUser"
 
 function App() {
   return (
@@ -17,8 +16,7 @@ function App() {
           <Route exact path="/mainmenu" element={<Home />} />
           <Route path="/" element={<AdminLogin />} />
           <Route path="/addUser" element={<AddEdit />} />
-          <Route path="/update/:id" element={<EditUser />} />
-          <Route path="/view/:id" element={<View />} />
+          <Route path="/update/:id" element={<View />} />
         </Routes>
       </div>
     </BrowserRouter>

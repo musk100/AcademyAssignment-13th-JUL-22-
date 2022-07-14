@@ -2,7 +2,6 @@ const express = require("express")
 const connection = require("./config/Database")
 const app = express()
 const cors = require("cors")
-const { response, request } = require("express")
 
 const AddController = require("./Controllers/AddController")
 const DisableController = require("./Controllers/DisableController")

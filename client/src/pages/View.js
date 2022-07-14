@@ -4,7 +4,6 @@ import Axios from "axios"
 import "./View.css"
 import Header from ".//Header"
 import { toast } from "react-toastify"
-import axios from "axios"
 
 const initialState = {
   username: "",
@@ -15,13 +14,9 @@ const initialState = {
 
 const View = () => {
   const [state, setState] = useState(initialState)
-  const [user, setUser] = useState([])
-
+  const [user, setUser] = useState(initialState)
+  const { username, email, password, usergroup } = user
   const { id } = useParams()
-  const [username, setUsername] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [usergroup, setUserGroup] = useState("")
 
   const navigate = useNavigate()
 
@@ -29,10 +24,12 @@ const View = () => {
     Axios.get(`http://localhost:5000/api/get/${id}`).then(response => setUser({ ...response.data[0] }))
   }, [id])
 
-  const updateUser = async e => {
+  const updateUser = e => {
     //update codes
     e.preventDefault()
-    await axios.put(`http://localhost:5000/update/${id}`, {})
+    Axios.put(`http://localhost:5000/api/update/${id}`, user).then(() => {
+      setUser({ username: "", email: "", password: "", userGroup: "" })
+    })
     navigate("/mainmenu")
   }
 
@@ -89,11 +86,12 @@ const View = () => {
               id="name"
               name="name"
               placeholder="Name ..."
-              value={user?.username || ""}
+              value={username || ""}
               maxLength="12"
               onChange={event => {
                 setUser({ ...user, username: event.target.value })
               }}
+              disabled
             />
 
             <label htmlFor="email">Email</label>
@@ -102,7 +100,7 @@ const View = () => {
               id="email"
               name="email"
               placeholder="Email ..."
-              value={user?.email || ""}
+              value={email || ""}
               onChange={event => {
                 setUser({ ...user, email: event.target.value })
               }}
@@ -113,11 +111,12 @@ const View = () => {
               id="password"
               name="password"
               placeholder="Password ..."
-              value={user?.password || ""}
+              value={password || ""}
               maxLength="12"
               onChange={event => {
                 setUser({ ...user, password: event.target.value })
               }}
+              required
             />
             <label htmlFor="usergroup">User Group</label>
             <input
@@ -125,10 +124,11 @@ const View = () => {
               id="usergroup"
               name="usergroup"
               placeholder="User Group ..."
-              value={user?.usergroup || ""}
+              value={usergroup || ""}
               onChange={event => {
                 setUser({ ...user, usergroup: event.target.value })
               }}
+              required
             />
             <input type="submit" value={id ? "Update" : "Save"} />
             <Link to="/mainMenu">

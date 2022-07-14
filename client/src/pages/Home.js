@@ -3,12 +3,10 @@ import { Link } from "react-router-dom"
 import "./Home.css"
 import { toast } from "react-toastify"
 import Axios from "axios"
-import { useNavigate } from "react-router-dom"
 import Header from ".//Header"
 
 const Home = () => {
   const [data, setData] = useState([])
-  const navigate = useNavigate()
 
   //fetch all data from API
   const loadData = async () => {
@@ -42,6 +40,7 @@ const Home = () => {
               <th style={{ textAlign: "center" }}>Email</th>
               <th style={{ textAlign: "center" }}>Password</th>
               <th style={{ textAlign: "center" }}>User Group</th>
+              <th style={{ textAlign: "center" }}>Status</th>
               <th style={{ textAlign: "center" }}>Action</th>
             </tr>
           </thead>
@@ -54,16 +53,14 @@ const Home = () => {
                   <td>{item.email}</td>
                   <td>{item.password}</td>
                   <td>{item.usergroup}</td>
+                  <td>{item.status}</td>
                   <td>
                     <Link to={`/update/${item.id}`}>
-                      <button className="btn btn-edit">Edit</button>
+                      <button className="btn btn-edit">View & Edit</button>
                     </Link>
                     <button className="btn btn-delete" onClick={() => deleteContact(item.id)}>
                       Delete
                     </button>
-                    <Link to={`/view/${item.id}`}>
-                      <button className="btn btn-view">View</button>
-                    </Link>
                   </td>
                 </tr>
               )
