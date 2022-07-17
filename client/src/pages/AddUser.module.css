@@ -43,8 +43,3 @@ input[type="button"] {
 input[type="submit"]:hover {
   background-color: #45a049;
 }
-
-.select {
-  width: 400px;
-  margin: 20px auto;
-}

@@ -3,6 +3,7 @@ import { Form, Button } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import "./AdminLogin.css"
 import Axios from "axios"
+import { toast } from "react-toastify"
 
 const AdminLogin = () => {
   const [user, setUser] = useState({
@@ -23,6 +24,7 @@ const AdminLogin = () => {
       localStorage.setItem("login", response.data.login)
       setShow(response.data.login)
       if (response.data.login) {
+        toast.success("Login Successful!")
         setMsg(response.data.msg)
       }
     } catch (e) {

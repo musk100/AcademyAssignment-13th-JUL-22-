@@ -19,14 +19,6 @@ const Home = () => {
     loadData()
   }, [])
 
-  const deleteContact = id => {
-    if (window.confirm("Are you sure you want to delete this contact?")) {
-      Axios.delete(`http://localhost:5000/api/remove/${id}`)
-      toast.success("Contact Deleted Successfully")
-      setTimeout(() => loadData(), 500)
-    }
-  }
-
   return (
     <>
       <Header />
@@ -47,7 +39,7 @@ const Home = () => {
           <tbody>
             {data.map((item, index) => {
               return (
-                <tr key={item.id}>
+                <tr key={item.username}>
                   <th scope="row">{index + 1}</th>
                   <td>{item.username}</td>
                   <td>{item.email}</td>
@@ -55,12 +47,9 @@ const Home = () => {
                   <td>{item.usergroup}</td>
                   <td>{item.status}</td>
                   <td>
-                    <Link to={`/update/${item.id}`}>
+                    <Link to={`/update/${item.username}`}>
                       <button className="btn btn-edit">View & Edit</button>
                     </Link>
-                    <button className="btn btn-delete" onClick={() => deleteContact(item.id)}>
-                      Delete
-                    </button>
                   </td>
                 </tr>
               )

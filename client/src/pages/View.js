@@ -13,22 +13,23 @@ const initialState = {
 }
 
 const View = () => {
-  const [state, setState] = useState(initialState)
   const [user, setUser] = useState(initialState)
-  const { username, email, password, usergroup } = user
-  const { id } = useParams()
+  const { email, password, usergroup } = user
+  const { username } = useParams()
 
   const navigate = useNavigate()
 
   useEffect(() => {
-    Axios.get(`http://localhost:5000/api/get/${id}`).then(response => setUser({ ...response.data[0] }))
-  }, [id])
+    Axios.get(`http://localhost:5000/api/get/${username}`)
+      // .then(response => console.log(response))
+      .then(response => setUser({ ...response.data[0] }))
+  }, [])
 
   const updateUser = e => {
     //update codes
     e.preventDefault()
-    Axios.put(`http://localhost:5000/api/update/${id}`, user).then(() => {
-      setUser({ username: "", email: "", password: "", userGroup: "" })
+    Axios.put(`http://localhost:5000/api/update/${username}`, user).then(() => {
+      setUser({ email: "", password: "", userGroup: "" })
     })
     navigate("/mainmenu")
   }
@@ -42,10 +43,10 @@ const View = () => {
             <p>User Contact Detail</p>
           </div>
           <div className="container">
-            <strong>ID:</strong>
+            {/* <strong>ID:</strong>
             <span>{id}</span>
             <br />
-            <br />
+            <br /> */}
             <strong>Username:</strong>
             <span>{user.username}</span>
             <br />
@@ -130,7 +131,9 @@ const View = () => {
               }}
               required
             />
-            <input type="submit" value={id ? "Update" : "Save"} />
+            <label htmlFor="status">Status</label>
+
+            <input type="submit" value={username ? "Update" : "Save"} />
             <Link to="/mainMenu">
               <input type="button" value="Go Back" />
             </Link>

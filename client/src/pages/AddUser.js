@@ -1,8 +1,8 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import CreatableSelect from "react-select/creatable"
 import { useNavigate, Link } from "react-router-dom"
 import "./AddUser.module.css"
-import axios from "axios"
+import Axios from "axios"
 import { toast } from "react-toastify"
 import makeAnimated from "react-select/animated"
 import Header from ".//Header"
@@ -38,43 +38,35 @@ const AddEdit = () => {
       color: "black"
     }
   ]
-
   const [state, setState] = useState(initialState)
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [usergroup, setUserGroup] = useState("")
-
-  // const loadOptions = (searchValue, callback) => {
-  //   setTimeout(() => {
-  //     const filteredOptions = Groups.filter(option => option.label.toLowerCase().includes(searchValue.toLowerCase()))
-  //     console.log("loadOptions", searchValue, filteredOptions)
-  //     callback(filteredOptions)
-  //   }, 500)
-  // }
+  const [APIData, setAPIData] = useState([])
+  const [groups, setGroups] = useState([Groups])
 
   const navigate = useNavigate()
 
-  const handleChange = (selectedOption, actionMeta) => {
-    console.log("handleChange", selectedOption, actionMeta)
+  const handleChange = Groups => {
+    console.log(Groups)
   }
 
-  const handleInputChange = (inputValue, actionMeta) => {
-    console.log("handleInputChange", inputValue, actionMeta)
-  }
+  // const handleInputChange = (inputValue, actionMeta) => {
+  //   console.log("handleInputChange", inputValue, actionMeta)
+  // }
 
   const handleSubmit = e => {
     e.preventDefault()
     if (!username || !email || !password || !usergroup) {
       toast.error("Please provide value for each input field!", { autoClose: 2000 })
     } else {
-      axios
-        .post("http://localhost:5000/api/post", {
-          username,
-          email,
-          password,
-          usergroup
-        })
+      Axios.post("http://localhost:5000/api/post", {
+        username,
+        email,
+        password,
+        usergroup
+      })
         .then(() => {
           setState({ username: "", email: "", password: "", usergroup: "" })
         })
@@ -116,6 +108,14 @@ const AddEdit = () => {
       }
     }
   }
+
+  useEffect(() => {
+    Axios.get(`http://localhost:5000/api/get/${username}`).then(response => setAPIData({ ...response.data[0] }))
+  })
+
+  useEffect(() => {
+    Axios.get("http://localhost:5000/api/getGroup").then(response => setGroups({ ...response.data[0] }))
+  })
 
   return (
     <>
@@ -167,15 +167,18 @@ const AddEdit = () => {
               setPassword(event.target.value)
             }}
           />
-          <label htmlFor="usergroup">
-            User Group
-            <CreatableSelect styles={colorStyles} components={animatedComponents} onChange={handleChange} options={Groups} onInputChange={handleInputChange} isMulti />
-          </label>
-          {/* value type="text" id="usergroup" name="usergroup" placeholder="User Group ..." value={usergroup || ""}
-          onChange=
-          {event => {
-            setUserGroup(event.target.value)
-          }} */}
+          <label htmlFor="usergroup">User Group</label>
+          {/* <CreatableSelect options={Groups} styles={colorStyles} components={animatedComponents} onChange={handleChange} isMulti /> */}
+          <input
+            type="text"
+            id="usergroup"
+            name="usergroup"
+            placeholder="User Group ..."
+            value={usergroup || ""}
+            onChange={event => {
+              setUserGroup(event.target.value)
+            }}
+          />
           <input type="submit" value={"Save"} />
           <Link to="/mainMenu">
             <input type="button" value="Go Back" />

@@ -16,7 +16,7 @@ function App() {
           <Route exact path="/mainmenu" element={<Home />} />
           <Route path="/" element={<AdminLogin />} />
           <Route path="/addUser" element={<AddEdit />} />
-          <Route path="/update/:id" element={<View />} />
+          <Route path="/update/:username" element={<View />} />
         </Routes>
       </div>
     </BrowserRouter>
