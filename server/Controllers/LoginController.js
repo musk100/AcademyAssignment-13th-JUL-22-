@@ -1,29 +1,23 @@
 const connection = require("../config/Database")
 const cookieParser = require("cookie-parser")
-const session = require("express-session")
 const bodyParser = require("body-parser")
 const express = require("express")
 const app = express()
 const bcrypt = require("bcrypt")
+
 const AddController = require("./AddController")
 
 const login = async function (app) {
   app.use(express.json())
   app.use(cookieParser())
   app.use(bodyParser.urlencoded({ extended: true }))
-  // app.use(
-  //   session({
-  //     key: "userId",
-  //     secret: "atanu",
-  //     resave: false,
-  //     saveUninitialized: false
-  //   })
-  // )
+
   app.post("/login", (request, response) => {
     //login user
     const username = request.body.username
     const password = request.body.password
-    const sqlQuery = "SELECT password FROM taskmanagement_db WHERE username = ?"
+    const status = request.params.status
+    const sqlQuery = "SELECT password, status FROM taskmanagement_db WHERE username = ?"
     connection.query(sqlQuery, [username], async (error, result, field) => {
       if (error) {
         console.log(error)
@@ -34,13 +28,20 @@ const login = async function (app) {
         response.end()
         return
       }
+      if (status == "active") {
+        response.send("Account status is active")
+        console.log("Account status is active!")
+      } else if (status == "inactive") {
+        response.send("Account status is inactive")
+        console.log("Account status is inactive!")
+      }
       const isValid = await bcrypt.compare(password, result[0].password)
       //password matched
       if (isValid) {
         response.send({ login: true, username: username })
         console.log("Successful login!")
       } else {
-        response.send({ login: false })
+        response.send({ message: "Invalid Credentials" })
         console.log("Invalid Credentials!")
       }
     })

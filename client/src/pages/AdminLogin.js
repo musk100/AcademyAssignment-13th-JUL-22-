@@ -10,9 +10,10 @@ const AdminLogin = () => {
     username: "",
     password: ""
   })
-
   const [show, setShow] = useState(false)
   const [msg, setMsg] = useState("")
+
+  Axios.defaults.withCredentials = true
 
   const navigate = useNavigate()
 
@@ -24,7 +25,14 @@ const AdminLogin = () => {
       localStorage.setItem("login", response.data.login)
       setShow(response.data.login)
       if (response.data.login) {
-        toast.success("Login Successful!")
+        toast.success("Login Successful!", { autoClose: 1000 })
+        setMsg(response.data.msg)
+      }
+      if (!user) {
+        toast.error("Please key in your credentials", { autoClose: 1000 })
+      }
+      if (!response.data.login) {
+        toast.error("Invalid Credentials!", { autoClose: 1000 })
         setMsg(response.data.msg)
       }
     } catch (e) {

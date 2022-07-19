@@ -7,114 +7,61 @@ import { toast } from "react-toastify"
 import makeAnimated from "react-select/animated"
 import Header from ".//Header"
 
-const initialState = {
-  name: "",
-  email: "",
-  password: "",
-  usergroup: ""
-}
-
 const AddEdit = () => {
   const animatedComponents = makeAnimated()
-  const Groups = [
-    {
-      label: "Admin",
-      value: "admin",
-      color: "#FF8B00"
-    },
-    {
-      label: "Project Lead",
-      value: "projectlead",
-      color: "#36B37E"
-    },
-    {
-      label: "Project Manager",
-      value: "projectmanager",
-      color: "#0052CC"
-    },
-    {
-      label: "Team Member",
-      value: "teammember",
-      color: "black"
-    }
-  ]
-  const [state, setState] = useState(initialState)
+  const Groups = ["admin", "project manager", "project lead", "team member", "devops"]
+  const [state, setState] = useState("")
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [usergroup, setUserGroup] = useState("")
+  const [usergroup, setUserGroup] = useState([])
+  const [status, setStatus] = useState("")
   const [APIData, setAPIData] = useState([])
-  const [groups, setGroups] = useState([Groups])
+
+  const [selectedOption, setSelectedOption] = useState([])
 
   const navigate = useNavigate()
 
-  const handleChange = Groups => {
-    console.log(Groups)
+  const handleStatus = e => {
+    setStatus(e.target.value)
+    console.log(e.target.value)
   }
 
-  // const handleInputChange = (inputValue, actionMeta) => {
-  //   console.log("handleInputChange", inputValue, actionMeta)
-  // }
+  const handleChange = selectedOption => {
+    setSelectedOption(selectedOption)
+    //setUserGroup(selectedOption)
+    console.log(selectedOption)
+
+    selectedOption.forEach(option => {
+      const value = option.value
+      setUserGroup([...usergroup, value])
+      console.log(usergroup)
+    })
+  }
 
   const handleSubmit = e => {
     e.preventDefault()
-    if (!username || !email || !password || !usergroup) {
-      toast.error("Please provide value for each input field!", { autoClose: 2000 })
+
+    if (!username || !email || !password || !usergroup || !status) {
+      toast.error("Please provide value for each input field!", { autoClose: 1000 })
     } else {
       Axios.post("http://localhost:5000/api/post", {
         username,
         email,
         password,
-        usergroup
+        usergroup,
+        status
       })
         .then(() => {
-          setState({ username: "", email: "", password: "", usergroup: "" })
+          setState({ username: "", email: "", password: "", usergroup: [], status: "" })
         })
         .catch(err => toast.error(err.response.data))
     }
-
     setTimeout(() => navigate("/mainmenu"), 500)
-  }
-
-  const colorStyles = {
-    control: styles => ({ ...styles, backgroundColor: "white" }),
-    option: (styles, { data, isDisabled, isFocused, isSelected }) => {
-      console.log("option", data, isFocused, isSelected, isDisabled)
-      return { ...styles, color: data.color }
-    },
-    multiValue: (styles, { data }) => {
-      return {
-        ...styles,
-        backgroundColor: data.color,
-        color: "#fff"
-      }
-    },
-
-    multiValueLabel: (styles, { data }) => {
-      return {
-        ...styles,
-        color: "#fff"
-      }
-    },
-
-    multiValueRemove: (styles, { data }) => {
-      return {
-        ...styles,
-        color: "#fff",
-        cursor: "pointer",
-        ":hover": {
-          color: "#fff"
-        }
-      }
-    }
   }
 
   useEffect(() => {
     Axios.get(`http://localhost:5000/api/get/${username}`).then(response => setAPIData({ ...response.data[0] }))
-  })
-
-  useEffect(() => {
-    Axios.get("http://localhost:5000/api/getGroup").then(response => setGroups({ ...response.data[0] }))
   })
 
   return (
@@ -168,17 +115,25 @@ const AddEdit = () => {
             }}
           />
           <label htmlFor="usergroup">User Group</label>
-          {/* <CreatableSelect options={Groups} styles={colorStyles} components={animatedComponents} onChange={handleChange} isMulti /> */}
-          <input
-            type="text"
-            id="usergroup"
-            name="usergroup"
-            placeholder="User Group ..."
-            value={usergroup || ""}
-            onChange={event => {
-              setUserGroup(event.target.value)
-            }}
-          />
+          {
+            <CreatableSelect
+              options={Groups.map(data => {
+                return { label: data, value: data }
+              })}
+              components={animatedComponents}
+              onChange={handleChange}
+              isMulti
+              value={selectedOption}
+            />
+          }
+          <label htmlFor="status">Status</label>
+          <select name="status" id="status" value={status || ""} onChange={handleStatus}>
+            <option hidden value="default">
+              Select an option
+            </option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
           <input type="submit" value={"Save"} />
           <Link to="/mainMenu">
             <input type="button" value="Go Back" />

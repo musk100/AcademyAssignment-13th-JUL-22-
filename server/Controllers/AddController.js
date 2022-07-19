@@ -1,4 +1,3 @@
-const { request } = require("express")
 const connection = require("../config/Database")
 //how much time is needed to calculate a single BCrypt hash.
 //The higher the 'saltRound', the more hashing rounds are done
@@ -10,16 +9,20 @@ const bcrypt = require("bcrypt")
 
 const Add = function (app) {
   app.post("/api/post", (request, response) => {
-    const { username, email, password, usergroup } = request.body
+    const { username, email, password, usergroup, status } = request.body
+    console.log(usergroup)
+    const groupStr = usergroup.toString()
+    console.log("group str", groupStr)
     bcrypt.hash(password, saltRounds, function (err, hash) {
-      const sqlInsert = "INSERT INTO taskmanagement_db (username, email, password, usergroup) VALUES ?"
-      const values = [[username, email, hash, usergroup]]
+      const sqlInsert = "INSERT INTO taskmanagement_db (username, email, password, usergroup, status) VALUES ?"
+      const values = [[username, email, hash, groupStr, status]]
       connection.query(sqlInsert, [values], function (error, result, field) {
         if (error) throw error
-        response.send({
-          message: "Table Data",
-          result: result
-        })
+        else
+          response.send({
+            message: "Table Data",
+            result: result
+          })
       })
     })
   })
