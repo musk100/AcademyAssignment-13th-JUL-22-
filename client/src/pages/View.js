@@ -1,52 +1,25 @@
 import React, { useState, useEffect } from "react"
-import { useNavigate, useParams, Link } from "react-router-dom"
 import CreatableSelect from "react-select/creatable"
+import { useNavigate, Link } from "react-router-dom"
+import "./AddUser.module.css"
 import Axios from "axios"
-import "./View.css"
-import Header from ".//Header"
 import { toast } from "react-toastify"
 import makeAnimated from "react-select/animated"
+import Header from ".//Header"
+import "./View.css"
 
 const View = () => {
   const animatedComponents = makeAnimated()
   const Groups = ["admin", "project manager", "project lead", "team member", "devops"]
   const [user, setUser] = useState("")
-  const { email, setEmail } = useState("")
-  const { password, setPassword } = useState("")
-  const { usergroup, setUserGroup } = useState("")
-  const { status, setStatus } = useState("")
-  const { username } = useParams()
-  const { state, setState } = useState("")
-  const { show, setShow } = useState("")
+  const [state, setState] = useState("")
+  const [username, setUsername] = useState("")
+  const [usergroup, setUserGroup] = useState([])
+  const [status, setStatus] = useState("")
   const [selectedOption, setSelectedOption] = useState([])
+
   const navigate = useNavigate()
 
-  useEffect(() => {
-    Axios.get(`http://localhost:5000/api/get/${username}`).then(response => setUser({ ...response.data[0] }))
-  }, [username])
-
-  useEffect(() => {
-    Axios.get("http://localhost:5000/api/getStatus").then(response => setShow({ ...response.data[0] }))
-  }, [])
-
-  const updateUser = e => {
-    //update codes
-    e.preventDefault()
-    if (!email || !password || !usergroup || !status) {
-      toast.error("Please provide value for each input field!", { autoClose: 1000 })
-    } else {
-      Axios.put(`http://localhost:5000/api/update/${username}`, {
-        email,
-        password,
-        usergroup,
-        status
-      }).then(() => {
-        setState({ email: "", password: "", userGroup: "", status: "" })
-      })
-    }
-
-    navigate("/mainmenu")
-  }
   const handleStatus = e => {
     setStatus(e.target.value)
     console.log(e.target.value)
@@ -63,6 +36,30 @@ const View = () => {
       console.log(usergroup)
     })
   }
+
+  const handleSubmit = e => {
+    e.preventDefault()
+
+    if (!usergroup || !status) {
+      toast.error("Please provide value for each input field!", { autoClose: 1000 })
+    } else {
+      Axios.put(`http://localhost:5000/api/update/${username}`, {
+        username,
+        usergroup,
+        status
+      })
+        .then(() => {
+          setState({ username: "", usergroup: [], status: "" })
+        })
+        .catch(err => toast.error(err.response.data))
+    }
+    toast.success("User updated successfully!", { autoClose: 1000 })
+    navigate("/mainmenu")
+  }
+
+  useEffect(() => {
+    Axios.get(`http://localhost:5000/api/get/${username}`).then(response => setUser({ ...response.data[0] }))
+  }, [username])
 
   return (
     <>
@@ -94,9 +91,8 @@ const View = () => {
             </Link>
           </div>
         </div>
-
         <div style={{ marginTop: "100px" }}>
-          <h2>Update User Information</h2>
+          <h2>Create User</h2>
           <form
             autoComplete="off"
             style={{
@@ -105,7 +101,7 @@ const View = () => {
               maxWidth: "400px",
               alignContent: "center"
             }}
-            onSubmit={updateUser}
+            onSubmit={handleSubmit}
           >
             <label htmlFor="username">Name</label>
             <input
@@ -116,32 +112,7 @@ const View = () => {
               value={username || ""}
               maxLength="12"
               onChange={event => {
-                setUser({ username: event.target.value })
-              }}
-              disabled
-            />
-
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email ..."
-              value={email || ""}
-              onChange={event => {
-                setEmail({ email: event.target.value })
-              }}
-            />
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Password ..."
-              value={password || ""}
-              maxLength="12"
-              onChange={event => {
-                setPassword({ password: event.target.value })
+                setUsername(event.target.value)
               }}
               required
             />

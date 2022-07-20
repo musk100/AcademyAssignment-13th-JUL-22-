@@ -11,6 +11,7 @@ const AddEdit = () => {
   const animatedComponents = makeAnimated()
   const Groups = ["admin", "project manager", "project lead", "team member", "devops"]
   const [state, setState] = useState("")
+  const [user, setUser] = useState("")
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -57,11 +58,12 @@ const AddEdit = () => {
         })
         .catch(err => toast.error(err.response.data))
     }
+    toast.success("User Created Successfully!", { autoClose: 1000 })
     setTimeout(() => navigate("/mainmenu"), 500)
   }
 
   useEffect(() => {
-    Axios.get(`http://localhost:5000/api/get/${username}`).then(response => setAPIData({ ...response.data[0] }))
+    Axios.get(`http://localhost:5000/api/get/${username}`).then(response => setUser({ ...response.data[0] }))
   })
 
   return (

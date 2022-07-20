@@ -4,7 +4,7 @@ const app = express()
 const cors = require("cors")
 
 const AddController = require("./Controllers/AddController")
-const DisableController = require("./Controllers/DisableController")
+const CheckGroup = require("./Controllers/CheckGroup")
 const LoginController = require("./Controllers/LoginController")
 const UpdateController = require("./Controllers/UpdateController")
 
@@ -34,7 +34,7 @@ app.get("/", (request, response) => {
 })
 
 AddController(app)
-DisableController(app)
+CheckGroup(app)
 LoginController(app)
 UpdateController(app)
 

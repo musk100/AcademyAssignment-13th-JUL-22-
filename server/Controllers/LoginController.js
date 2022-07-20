@@ -16,8 +16,7 @@ const login = async function (app) {
     //login user
     const username = request.body.username
     const password = request.body.password
-    const status = request.params.status
-    const sqlQuery = "SELECT password, status FROM taskmanagement_db WHERE username = ?"
+    const sqlQuery = "SELECT password FROM taskmanagement_db WHERE username = ?"
     connection.query(sqlQuery, [username], async (error, result, field) => {
       if (error) {
         console.log(error)
@@ -27,13 +26,6 @@ const login = async function (app) {
         console.log("Invalid Credentials!")
         response.end()
         return
-      }
-      if (status == "active") {
-        response.send("Account status is active")
-        console.log("Account status is active!")
-      } else if (status == "inactive") {
-        response.send("Account status is inactive")
-        console.log("Account status is inactive!")
       }
       const isValid = await bcrypt.compare(password, result[0].password)
       //password matched
@@ -48,11 +40,17 @@ const login = async function (app) {
   })
 
   app.get("/login", (request, response) => {
-    if (request.session.user) {
-      response.send({ login: true, user: request.session.user })
-    } else {
-      response.send({ login: false })
-    }
+    const { username } = request.params
+    const sqlGet = "SELECT usergroup FROM taskmanagement_db WHERE username = ?"
+    connection.query(sqlGet, [username], (error, result) => {
+      if (error) throw error
+      if (request.session.user) {
+        response.send({ login: true, user: request.session.user })
+        console.log(result)
+      } else {
+        response.send({ login: false })
+      }
+    })
   })
 }
 

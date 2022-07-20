@@ -35,7 +35,12 @@ const Header = () => {
             Add User
           </p>
         </Link>
-        <Link to="/">
+        <Link to="/changepassword">
+          <p className={`${activeTab === "ChangePassword" ? "active" : ""}`} onClick={() => setActiveTab("ChangePassword")}>
+            Change Password
+          </p>
+        </Link>
+        <Link to="/login">
           <p className="link-logout" onClick={handleLogout}>
             Logout
           </p>

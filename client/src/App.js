@@ -6,6 +6,8 @@ import AddEdit from "./pages/AddUser"
 import Home from "./pages/Home"
 import AdminLogin from "./pages/AdminLogin"
 import View from "./pages/View"
+import ChangePassword from "./pages/ChangePassword"
+import Main from "./pages/Main"
 
 function App() {
   return (
@@ -14,9 +16,11 @@ function App() {
         <ToastContainer position="top-center" />
         <Routes>
           <Route exact path="/mainmenu" element={<Home />} />
-          <Route path="/" element={<AdminLogin />} />
+          <Route path="/" element={<Main />} />
+          <Route path="/login" element={<AdminLogin />} />
           <Route path="/addUser" element={<AddEdit />} />
           <Route path="/update/:username" element={<View />} />
+          <Route path="/changepassword" element={<ChangePassword />} />
         </Routes>
       </div>
     </BrowserRouter>
