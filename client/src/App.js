@@ -9,6 +9,7 @@ import View from "./pages/View"
 import ChangePassword from "./pages/ChangePassword"
 import User from "./pages/User"
 import UserChangePassword from "./pages/UserChangePassword"
+import UserChangeEmail from "./pages/UserChangeEmail"
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <Route path="/update/:username" element={<View />} />
           <Route path="/changepassword" element={<ChangePassword />} />
           <Route path="/userchangepassword" element={<UserChangePassword />} />
+          <Route path="/userchangeemail" element={<UserChangeEmail />} />
           <Route path="/user" element={<User />} />
         </Routes>
       </div>

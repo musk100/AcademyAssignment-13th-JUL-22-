@@ -48,6 +48,20 @@ const update = async function (app) {
       })
     })
   })
+  app.put("/api/updates/:username", (request, response) => {
+    const { username } = request.params
+    const { email } = request.body
+    console.log(request.body)
+    const sqlUpdate = "UPDATE taskmanagement_db SET email = ? WHERE username = ?"
+    connection.query(sqlUpdate, [email, username], (error, result) => {
+      if (error) {
+        console.log(error)
+      } else {
+        console.log(result)
+        console.log("Update Success!")
+      }
+    })
+  })
 }
 
 module.exports = update

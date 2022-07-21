@@ -38,7 +38,6 @@ const AddEdit = () => {
 
   const handleSubmit = e => {
     e.preventDefault()
-
     if (!username || !email || !password || !usergroup || !status) {
       toast.error("Please provide value for each input field!", { autoClose: 1000 })
     } else {
@@ -54,8 +53,15 @@ const AddEdit = () => {
         })
         .catch(err => toast.error(err.response.data))
     }
-    toast.success("User Created Successfully!", { autoClose: 1000 })
-    setTimeout(() => navigate("/mainmenu"), 500)
+    if (username && password && email && usergroup && status) {
+      toast.success("User Created Successfully!", { autoClose: 1000 })
+      //clear all input values if create user is successful
+      setUsername("")
+      setEmail("")
+      setPassword("")
+      setSelectedOption("")
+      setStatus("")
+    }
   }
 
   useEffect(() => {

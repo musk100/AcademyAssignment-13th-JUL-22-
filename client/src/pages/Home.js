@@ -6,7 +6,6 @@ import Header from ".//Header"
 
 const Home = () => {
   const [data, setData] = useState([])
-  //on initial load, fetch all data from backend
   useEffect(() => {
     loadData()
   }, [])

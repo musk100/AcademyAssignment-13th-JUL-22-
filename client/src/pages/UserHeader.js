@@ -13,6 +13,8 @@ const Header = () => {
       setActiveTab("User")
     } else if (location.pathname === "/userchangepassword") {
       setActiveTab("UserChangePassword")
+    } else if (location.pathname === "/userchangeemail") {
+      setActiveTab("UserChangeEmail")
     }
   }, [location])
 
@@ -31,9 +33,14 @@ const Header = () => {
             Home
           </p>
         </Link>
+        <Link to="/userchangeemail">
+          <p className={`${activeTab === "UserChangeEmail" ? "active" : ""}`} onClick={() => setActiveTab("UserChangeEmail")}>
+            Update Email
+          </p>
+        </Link>
         <Link to="/userchangepassword">
           <p className={`${activeTab === "UserChangePassword" ? "active" : ""}`} onClick={() => setActiveTab("UserChangePassword")}>
-            Update Profile
+            Update Password
           </p>
         </Link>
         <Link to="/">

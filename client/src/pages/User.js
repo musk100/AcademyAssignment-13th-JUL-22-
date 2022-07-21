@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import "./Home.css"
 import Axios from "axios"
 import UserHeader from ".//UserHeader"
-import { useParams, Link } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import "./AddUser.module.css"
 import "./View.css"
 

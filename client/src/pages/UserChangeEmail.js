@@ -3,32 +3,32 @@ import { Link } from "react-router-dom"
 import "./AddUser.module.css"
 import Axios from "axios"
 import { toast } from "react-toastify"
-import Header from ".//Header"
+import UserHeader from ".//UserHeader"
 import "./View.css"
 
-const ChangePassword = () => {
-  const [user, setUser] = useState("")
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
+const UserChangeEmail = () => {
+  const [user, setUser] = useState()
+  const username = localStorage.getItem("username")
+  const [email, setEmail] = useState("")
 
   const handleSubmit = e => {
     e.preventDefault()
-    if (!username || !password) {
+    if (!username || !email) {
       toast.error("Please provide value for each input field!", { autoClose: 1000 })
     } else {
-      Axios.put(`http://localhost:5000/api/updated/${username}`, {
+      Axios.put(`http://localhost:5000/api/updates/${username}`, {
         username,
-        password
+        email
       })
         .then(() => {
-          setUser({ username: "", password: "" })
+          setUser({ username: "", email: "" })
         })
         .catch(err => toast.error(err.response.data))
     }
-    if (username && password) {
+    if (username && email) {
       toast.success("User updated successfully!", { autoClose: 1000 })
       //clear input values
-      setPassword("")
+      setEmail("")
     }
   }
 
@@ -38,9 +38,9 @@ const ChangePassword = () => {
 
   return (
     <>
-      <Header />
+      <UserHeader />
       <div style={{ marginTop: "100px" }}>
-        <h2>Update User Details</h2>
+        <h2>Update Profile</h2>
         <form
           autoComplete="off"
           style={{
@@ -60,24 +60,23 @@ const ChangePassword = () => {
             value={username || ""}
             maxLength="12"
             onChange={event => {
-              setUsername(event.target.value)
+              setUser({ ...user, username: event.target.value })
             }}
-            required
+            disabled
           />
-          <label htmlFor="password">Password</label>
+          <label htmlFor="email">Email</label>
           <input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Password ..."
-            value={password || ""}
-            maxLength="12"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Email ..."
+            value={email || ""}
             onChange={event => {
-              setPassword(event.target.value)
+              setEmail(event.target.value)
             }}
           />
           <input type="submit" value={username ? "Update" : "Save"} />
-          <Link to="/mainMenu">
+          <Link to="/user">
             <input type="button" value="Go Back" />
           </Link>
         </form>
@@ -86,4 +85,4 @@ const ChangePassword = () => {
   )
 }
 
-export default ChangePassword
+export default UserChangeEmail

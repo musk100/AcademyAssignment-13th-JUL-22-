@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useNavigate, useParams, Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import "./AddUser.module.css"
 import Axios from "axios"
 import { toast } from "react-toastify"
@@ -8,11 +8,8 @@ import "./View.css"
 
 const UserChangePassword = () => {
   const [user, setUser] = useState()
-  const [state, setState] = useState("")
   const username = localStorage.getItem("username")
   const [password, setPassword] = useState("")
-  const [email, setEmail] = useState("")
-  const navigate = useNavigate()
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -24,7 +21,7 @@ const UserChangePassword = () => {
         password
       })
         .then(() => {
-          setState({ username: "", email: "", password: "" })
+          setUser({ username: "", password: "" })
         })
         .catch(err => toast.error(err.response.data))
     }
