@@ -8,14 +8,14 @@ import makeAnimated from "react-select/animated"
 import Header from ".//Header"
 import "./View.css"
 
-const initialState = {
-  email: ""
-}
+// const initialState = {
+//   email: ""
+// }
 
 const View = () => {
   const animatedComponents = makeAnimated()
-  const Groups = ["admin", "project manager", "project lead", "team member", "devops"]
-  const [user, setUser] = useState(initialState)
+  const Groups = ["admin", "project manager", "project lead", "team member", "devops", "General"]
+  const [user, setUser] = useState("")
   const { username } = useParams()
   const [usergroup, setUserGroup] = useState([])
   const { email } = user
@@ -45,7 +45,7 @@ const View = () => {
     if (!usergroup || !status) {
       toast.error("Please provide value for each input field!", { autoClose: 1000 })
     } else {
-      Axios.post(`http://localhost:5000/api/update/${username}`, {
+      Axios.put(`http://localhost:5000/api/update/${username}`, {
         email,
         usergroup,
         status
@@ -132,6 +132,7 @@ const View = () => {
             <label htmlFor="usergroup">User Group</label>
             {
               <CreatableSelect
+                className="reactSelect"
                 options={Groups.map(data => {
                   return { label: data, value: data }
                 })}

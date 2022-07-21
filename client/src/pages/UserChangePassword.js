@@ -11,6 +11,7 @@ const UserChangePassword = () => {
   const [state, setState] = useState("")
   const username = localStorage.getItem("username")
   const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("")
   const navigate = useNavigate()
 
   const handleSubmit = e => {
@@ -23,12 +24,15 @@ const UserChangePassword = () => {
         password
       })
         .then(() => {
-          setState({ username: "", password: "" })
+          setState({ username: "", email: "", password: "" })
         })
         .catch(err => toast.error(err.response.data))
     }
-    toast.success("User updated successfully!", { autoClose: 1000 })
-    navigate("/user")
+    if (username && password) {
+      toast.success("User updated successfully!", { autoClose: 1000 })
+      //clear input values
+      setPassword("")
+    }
   }
 
   useEffect(() => {
@@ -39,7 +43,7 @@ const UserChangePassword = () => {
     <>
       <UserHeader />
       <div style={{ marginTop: "100px" }}>
-        <h2>Update Password</h2>
+        <h2>Update Profile</h2>
         <form
           autoComplete="off"
           style={{

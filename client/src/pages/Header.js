@@ -13,6 +13,8 @@ const Header = () => {
       setActiveTab("Home")
     } else if (location.pathname === "/addUser") {
       setActiveTab("AddUser")
+    } else if (location.pathname === "/changepassword") {
+      setActiveTab("ChangePassword")
     }
   }, [location])
 

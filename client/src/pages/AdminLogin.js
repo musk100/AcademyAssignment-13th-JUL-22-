@@ -8,7 +8,6 @@ import { toast } from "react-toastify"
 const AdminLogin = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [status, setStatus] = useState("")
   const [msg, setMsg] = useState("")
   const navigate = useNavigate()
   Axios.defaults.withCredentials = true
@@ -28,6 +27,12 @@ const AdminLogin = () => {
       //if user logged in, fetch data from backend to get usergroup
       if (response.data.login === true) {
         try {
+          const isStatus = response.data
+          if (isStatus === "active") {
+            isAdmin()
+          } else if (isStatus === "inactive") {
+            toast.error("Invalid Credentials")
+          }
           const currentUser = response.data.username
           const group = await Axios.get("http://localhost:5000/api/getGroup", {
             params: {
@@ -44,11 +49,10 @@ const AdminLogin = () => {
           console.log(group)
         } catch (e) {}
         toast.success("Login Successful!", { autoClose: 1000 })
-        setMsg(response.data.msg)
-      }
-      if (!response.data.login) {
+      } else if (response.data.login === false) {
         toast.error("Invalid Credentials!", { autoClose: 1000 })
-        setMsg(response.data.msg)
+      } else if (response.data === "") {
+        toast.error("Invalid Credentials!", { autoClose: 1000 })
       }
     } catch (e) {
       console.log("There was a problem")
@@ -56,11 +60,6 @@ const AdminLogin = () => {
   }
 
   Axios.defaults.withCredentials = true
-
-  useEffect(() => {
-    Axios.get("http://localhost:5000/api/getStatus").then(response => setStatus({ ...response.data[0] }))
-  }, [])
-
   return (
     <>
       <div className="topnav" id="myTopnav">

@@ -9,10 +9,10 @@ const Header = () => {
   const location = useLocation()
 
   useEffect(() => {
-    if (location.pathname === "/mainmenu") {
-      setActiveTab("Home")
-    } else if (location.pathname === "/addUser") {
-      setActiveTab("AddUser")
+    if (location.pathname === "/user") {
+      setActiveTab("User")
+    } else if (location.pathname === "/userchangepassword") {
+      setActiveTab("UserChangePassword")
     }
   }, [location])
 
@@ -33,7 +33,7 @@ const Header = () => {
         </Link>
         <Link to="/userchangepassword">
           <p className={`${activeTab === "UserChangePassword" ? "active" : ""}`} onClick={() => setActiveTab("UserChangePassword")}>
-            Change Password
+            Update Profile
           </p>
         </Link>
         <Link to="/">

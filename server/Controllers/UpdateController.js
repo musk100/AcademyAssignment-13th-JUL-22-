@@ -16,7 +16,7 @@ const update = async function (app) {
   })
 
   //Update User
-  app.post("/api/update/:username", (request, response) => {
+  app.put("/api/update/:username", (request, response) => {
     const { username } = request.params
     const { email, usergroup, status } = request.body
     console.log(request.body)

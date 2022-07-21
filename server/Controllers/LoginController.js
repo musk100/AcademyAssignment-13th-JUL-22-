@@ -17,24 +17,26 @@ const login = async function (app) {
     const username = request.body.username
     const password = request.body.password
     const sqlQuery = "SELECT status, password FROM taskmanagement_db WHERE username = ?"
-    connection.query(sqlQuery, [username], async (error, result, field) => {
+    connection.query(sqlQuery, [username], async (error, result) => {
       if (error) {
         console.log(error)
         return
       }
-      // if (result[0].status === "active") {
-      //   response.send({ login: true, username: username })
-      // }
       if (!result.length) {
         console.log("Invalid Credentials!")
         response.end()
         return
       }
+      console.log(result[0].status)
       const isValid = await bcrypt.compare(password, result[0].password)
       //password matched
-      if (isValid) {
+      if (isValid && result[0].status === "active") {
         response.send({ login: true, username: username })
         console.log("Successful login!")
+        console.log("Authorized Account")
+      } else {
+        console.log("Invalid Credentials!")
+        response.send({ login: false })
       }
     })
   })
