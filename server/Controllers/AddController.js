@@ -26,13 +26,6 @@ const Add = function (app) {
       })
     })
   })
-
-  app.get("/api/getGroup", (request, response) => {
-    const sqlGet = "SELECT groupname FROM groups"
-    connection.query(sqlGet, (error, result) => {
-      response.send(result)
-    })
-  })
 }
 
 module.exports = Add

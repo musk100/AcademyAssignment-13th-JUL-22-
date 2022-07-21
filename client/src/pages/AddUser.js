@@ -17,12 +17,8 @@ const AddEdit = () => {
   const [password, setPassword] = useState("")
   const [usergroup, setUserGroup] = useState([])
   const [status, setStatus] = useState("")
-  const [APIData, setAPIData] = useState([])
-
   const [selectedOption, setSelectedOption] = useState([])
-
   const navigate = useNavigate()
-
   const handleStatus = e => {
     setStatus(e.target.value)
     console.log(e.target.value)

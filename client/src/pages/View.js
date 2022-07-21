@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import CreatableSelect from "react-select/creatable"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate, useParams, Link } from "react-router-dom"
 import "./AddUser.module.css"
 import Axios from "axios"
 import { toast } from "react-toastify"
@@ -8,13 +8,17 @@ import makeAnimated from "react-select/animated"
 import Header from ".//Header"
 import "./View.css"
 
+const initialState = {
+  email: ""
+}
+
 const View = () => {
   const animatedComponents = makeAnimated()
   const Groups = ["admin", "project manager", "project lead", "team member", "devops"]
-  const [user, setUser] = useState("")
-  const [state, setState] = useState("")
-  const [username, setUsername] = useState("")
+  const [user, setUser] = useState(initialState)
+  const { username } = useParams()
   const [usergroup, setUserGroup] = useState([])
+  const { email } = user
   const [status, setStatus] = useState("")
   const [selectedOption, setSelectedOption] = useState([])
 
@@ -36,20 +40,18 @@ const View = () => {
       console.log(usergroup)
     })
   }
-
   const handleSubmit = e => {
     e.preventDefault()
-
     if (!usergroup || !status) {
       toast.error("Please provide value for each input field!", { autoClose: 1000 })
     } else {
-      Axios.put(`http://localhost:5000/api/update/${username}`, {
-        username,
+      Axios.post(`http://localhost:5000/api/update/${username}`, {
+        email,
         usergroup,
         status
       })
         .then(() => {
-          setState({ username: "", usergroup: [], status: "" })
+          setUser({ email: "", usergroup: [], status: "" })
         })
         .catch(err => toast.error(err.response.data))
     }
@@ -92,7 +94,7 @@ const View = () => {
           </div>
         </div>
         <div style={{ marginTop: "100px" }}>
-          <h2>Create User</h2>
+          <h2>Update User Details</h2>
           <form
             autoComplete="off"
             style={{
@@ -109,12 +111,23 @@ const View = () => {
               id="name"
               name="name"
               placeholder="Name ..."
-              value={username || ""}
+              value={user.username || ""}
               maxLength="12"
               onChange={event => {
-                setUsername(event.target.value)
+                setUser({ ...user, username: event.target.value })
               }}
               required
+            />
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Email ..."
+              value={user.email || ""}
+              onChange={event => {
+                setUser({ ...user, email: event.target.value })
+              }}
             />
             <label htmlFor="usergroup">User Group</label>
             {

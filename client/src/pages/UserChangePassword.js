@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate, useParams, Link } from "react-router-dom"
 import "./AddUser.module.css"
 import Axios from "axios"
 import { toast } from "react-toastify"
-import Header from ".//Header"
+import UserHeader from ".//UserHeader"
 import "./View.css"
 
-const ChangePassword = () => {
-  const [user, setUser] = useState("")
+const UserChangePassword = () => {
+  const [user, setUser] = useState()
   const [state, setState] = useState("")
-  const [username, setUsername] = useState("")
+  const username = localStorage.getItem("username")
   const [password, setPassword] = useState("")
-  const [email, setEmail] = useState("")
   const navigate = useNavigate()
 
   const handleSubmit = e => {
@@ -29,7 +28,7 @@ const ChangePassword = () => {
         .catch(err => toast.error(err.response.data))
     }
     toast.success("User updated successfully!", { autoClose: 1000 })
-    navigate("/mainmenu")
+    navigate("/user")
   }
 
   useEffect(() => {
@@ -38,9 +37,9 @@ const ChangePassword = () => {
 
   return (
     <>
-      <Header />
+      <UserHeader />
       <div style={{ marginTop: "100px" }}>
-        <h2>Update User Details</h2>
+        <h2>Update Password</h2>
         <form
           autoComplete="off"
           style={{
@@ -60,9 +59,9 @@ const ChangePassword = () => {
             value={username || ""}
             maxLength="12"
             onChange={event => {
-              setUsername(event.target.value)
+              setUser({ ...user, username: event.target.value })
             }}
-            required
+            disabled
           />
           <label htmlFor="password">Password</label>
           <input
@@ -77,7 +76,7 @@ const ChangePassword = () => {
             }}
           />
           <input type="submit" value={username ? "Update" : "Save"} />
-          <Link to="/mainMenu">
+          <Link to="/user">
             <input type="button" value="Go Back" />
           </Link>
         </form>
@@ -86,4 +85,4 @@ const ChangePassword = () => {
   )
 }
 
-export default ChangePassword
+export default UserChangePassword

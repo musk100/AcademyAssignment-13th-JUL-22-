@@ -24,15 +24,6 @@ app.get("/api/get", (request, response) => {
   })
 })
 
-app.get("/", (request, response) => {
-  // const sqlInsert = "INSERT INTO taskmanagement_db (username, email, password, usergroup) VALUES ('john doe', 'johndoe@gmail.com', 'username', 'project manager')"
-  // connection.query(sqlInsert, (error, result) => {
-  //   console.log("error", error)
-  //   console.log("result", result)
-  // response.send("Hello Express")
-  // })
-})
-
 AddController(app)
 CheckGroup(app)
 LoginController(app)

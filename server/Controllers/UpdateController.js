@@ -16,21 +16,20 @@ const update = async function (app) {
   })
 
   //Update User
-  app.put("/api/update/:username", (request, response) => {
+  app.post("/api/update/:username", (request, response) => {
     const { username } = request.params
-    const { usergroup, status } = request.body
+    const { email, usergroup, status } = request.body
     console.log(request.body)
     const groupStr = usergroup.toString()
-    const sqlUpdate = "UPDATE taskmanagement_db SET usergroup = ?, status = ? WHERE username = ?"
-    connection.query(sqlUpdate, [groupStr, status, username], (error, result) => {
-      console.log(groupStr)
-      console.log(status)
+    const sqlUpdate = "UPDATE taskmanagement_db SET email = ?, usergroup = ?, status = ? WHERE username = ?"
+    connection.query(sqlUpdate, [email, groupStr, status, username], (error, result) => {
+      console.log(sqlUpdate)
       if (error) {
         console.log(error)
       } else {
         console.log(result)
-        console.log("Update Success!")
       }
+      console.log("Update Success!")
     })
   })
   app.put("/api/updated/:username", (request, response) => {

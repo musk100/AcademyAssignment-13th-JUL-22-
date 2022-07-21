@@ -6,30 +6,45 @@ import Axios from "axios"
 import { toast } from "react-toastify"
 
 const AdminLogin = () => {
-  const [user, setUser] = useState({
-    username: "",
-    password: ""
-  })
-  const [show, setShow] = useState(false)
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [status, setStatus] = useState("")
   const [msg, setMsg] = useState("")
-
-  Axios.defaults.withCredentials = true
-
   const navigate = useNavigate()
+  Axios.defaults.withCredentials = true
 
   async function handleSubmit(e) {
     e.preventDefault()
+    //login user
     try {
-      const response = await Axios.post("http://localhost:5000/login", user)
+      const response = await Axios.post("http://localhost:5000/login", {
+        username: username,
+        password: password
+      })
       console.log(response)
       localStorage.setItem("login", response.data.login)
-      setShow(response.data.login)
-      if (response.data.login) {
+      localStorage.setItem("username", response.data.username)
+      console.log(response.data.username)
+      //if user logged in, fetch data from backend to get usergroup
+      if (response.data.login === true) {
+        try {
+          const currentUser = response.data.username
+          const group = await Axios.get("http://localhost:5000/api/getGroup", {
+            params: {
+              username: currentUser
+            }
+          })
+          //if user is admin, navigate to admin page
+          const isAdmin = group.data
+          if (isAdmin === true) {
+            navigate("/mainmenu")
+          } else {
+            navigate("/user")
+          }
+          console.log(group)
+        } catch (e) {}
         toast.success("Login Successful!", { autoClose: 1000 })
         setMsg(response.data.msg)
-      }
-      if (!user) {
-        toast.error("Please key in your credentials", { autoClose: 1000 })
       }
       if (!response.data.login) {
         toast.error("Invalid Credentials!", { autoClose: 1000 })
@@ -40,33 +55,11 @@ const AdminLogin = () => {
     }
   }
 
-  useEffect(() => {
-    if (show) {
-      navigate("/mainmenu")
-    }
-  }, [show])
-
   Axios.defaults.withCredentials = true
 
   useEffect(() => {
-    const checkLogin = async () => {
-      const response = await Axios.get("http://localhost:5000/login")
-      console.log(response)
-      if (response.data.user) {
-        navigate("/mainmenu")
-      }
-    }
+    Axios.get("http://localhost:5000/api/getStatus").then(response => setStatus({ ...response.data[0] }))
   }, [])
-
-  const userInput = event => {
-    const { name, value } = event.target
-    setUser(prev => {
-      return {
-        ...prev,
-        [name]: value
-      }
-    })
-  }
 
   return (
     <>
@@ -79,13 +72,32 @@ const AdminLogin = () => {
           <Form.Group className="mb-3" controlId="formBasicUsername">
             <Form.Label>Username</Form.Label>
             <br />
-            <Form.Control type="text" placeholder="Enter username" name="username" value={user.username} onChange={userInput} required />
+            <Form.Control
+              type="text"
+              placeholder="Enter username"
+              name="username"
+              value={username}
+              onChange={event => {
+                setUsername(event.target.value)
+              }}
+              required
+            />
             <br />
           </Form.Group>
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
             <br />
-            <Form.Control type="password" placeholder="Password" maxLength="12" name="password" value={user.password} onChange={userInput} required />
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              maxLength="12"
+              name="password"
+              value={password}
+              onChange={event => {
+                setPassword(event.target.value)
+              }}
+              required
+            />
           </Form.Group>
           <Button variant="primary" type="submit">
             Submit

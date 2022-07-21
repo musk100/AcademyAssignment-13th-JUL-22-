@@ -19,7 +19,6 @@ const Header = () => {
   async function handleLogout(e) {
     localStorage.removeItem("login")
     localStorage.removeItem("username")
-    localStorage.removeItem("email")
     navigate("/")
   }
 
@@ -27,18 +26,13 @@ const Header = () => {
     <div className="header">
       <p className="logo">User Management System</p>
       <div className="header-right">
-        <Link to="/mainmenu">
-          <p className={`${activeTab === "Home" ? "active" : ""}`} onClick={() => setActiveTab("Home")}>
+        <Link to="/user">
+          <p className={`${activeTab === "User" ? "active" : ""}`} onClick={() => setActiveTab("User")}>
             Home
           </p>
         </Link>
-        <Link to="/addUser">
-          <p className={`${activeTab === "AddUser" ? "active" : ""}`} onClick={() => setActiveTab("AddUser")}>
-            Add User
-          </p>
-        </Link>
-        <Link to="/changepassword">
-          <p className={`${activeTab === "ChangePassword" ? "active" : ""}`} onClick={() => setActiveTab("ChangePassword")}>
+        <Link to="/userchangepassword">
+          <p className={`${activeTab === "UserChangePassword" ? "active" : ""}`} onClick={() => setActiveTab("UserChangePassword")}>
             Change Password
           </p>
         </Link>
