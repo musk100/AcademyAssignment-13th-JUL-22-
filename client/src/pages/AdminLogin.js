@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { Form, Button } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
 import "./AdminLogin.css"
@@ -8,7 +8,6 @@ import { toast } from "react-toastify"
 const AdminLogin = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [msg, setMsg] = useState("")
   const navigate = useNavigate()
   Axios.defaults.withCredentials = true
 

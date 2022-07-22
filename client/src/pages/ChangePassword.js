@@ -11,6 +11,10 @@ const ChangePassword = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
+  function checkPassword(password) {
+    const re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,10}$/
+    return re.test(password)
+  }
   const handleSubmit = e => {
     e.preventDefault()
     if (!username || !password) {
@@ -26,9 +30,13 @@ const ChangePassword = () => {
         .catch(err => toast.error(err.response.data))
     }
     if (username && password) {
-      toast.success("User updated successfully!", { autoClose: 1000 })
-      //clear input values
-      setPassword("")
+      if (checkPassword(password) === true) {
+        toast.success("User updated successfully!", { autoClose: 1000 })
+        //clear input values
+        setPassword("")
+      } else if (checkPassword(password) === false) {
+        toast.error("Please include uppercase characters, special characters, numbers and alphabets in the password field", { autoClose: 2500 })
+      }
     }
   }
 
@@ -71,7 +79,8 @@ const ChangePassword = () => {
             name="password"
             placeholder="Password ..."
             value={password || ""}
-            maxLength="12"
+            maxLength={10}
+            minLength={8}
             onChange={event => {
               setPassword(event.target.value)
             }}

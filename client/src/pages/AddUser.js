@@ -24,6 +24,11 @@ const AddEdit = () => {
     console.log(e.target.value)
   }
 
+  function checkPassword(password) {
+    const re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,10}$/
+    return re.test(password)
+  }
+
   const handleChange = selectedOption => {
     setSelectedOption(selectedOption)
     //setUserGroup(selectedOption)
@@ -54,13 +59,17 @@ const AddEdit = () => {
         .catch(err => toast.error(err.response.data))
     }
     if (username && password && email && usergroup && status) {
-      toast.success("User Created Successfully!", { autoClose: 1000 })
-      //clear all input values if create user is successful
-      setUsername("")
-      setEmail("")
-      setPassword("")
-      setSelectedOption("")
-      setStatus("")
+      if (checkPassword(password) === true) {
+        toast.success("User Created Successfully!", { autoClose: 1000 })
+        //clear all input values if create user is successful
+        setUsername("")
+        setEmail("")
+        setPassword("")
+        setSelectedOption("")
+        setStatus("")
+      } else if (checkPassword(password) === false) {
+        toast.error("Please include uppercase characters, special characters, numbers and alphabets in the password field", { autoClose: 2500 })
+      }
     }
   }
 

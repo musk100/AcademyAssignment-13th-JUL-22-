@@ -2,7 +2,7 @@ const connection = require("../config/Database")
 const bcrypt = require("bcrypt")
 const saltRounds = 4
 
-const update = async function (app) {
+const update = function (app) {
   //Edit User
   app.get("/api/get/:username", (request, response) => {
     const { username } = request.params

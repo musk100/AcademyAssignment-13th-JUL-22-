@@ -19,10 +19,8 @@ const View = () => {
   const { username } = useParams()
   const [usergroup, setUserGroup] = useState([])
   const { email } = user
-  const [status, setStatus] = useState("")
+  const [status, setStatus] = useState("active")
   const [selectedOption, setSelectedOption] = useState([])
-
-  const navigate = useNavigate()
 
   const handleStatus = e => {
     setStatus(e.target.value)
@@ -40,6 +38,11 @@ const View = () => {
       console.log(usergroup)
     })
   }
+
+  function checkEmail(email) {
+    const re = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
+    return re.test(email)
+  }
   const handleSubmit = e => {
     e.preventDefault()
     if (!usergroup || !status) {
@@ -55,8 +58,16 @@ const View = () => {
         })
         .catch(err => toast.error(err.response.data))
     }
-    toast.success("User updated successfully!", { autoClose: 1000 })
-    navigate("/mainmenu")
+    if (username && status) {
+      if (checkEmail(email) === true) {
+        toast.success("User Updated Successfully!", { autoClose: 1000 })
+        //clear all input values if update user is successful
+        setSelectedOption("")
+        setStatus("")
+      } else if (checkEmail(email) === false) {
+        toast.error("Please key in a correct email format")
+      }
+    }
   }
 
   useEffect(() => {
@@ -144,10 +155,9 @@ const View = () => {
             }
             <label htmlFor="status">Status</label>
             <select name="status" id="status" value={status || ""} onChange={handleStatus}>
-              <option hidden value="default">
-                Select an option
+              <option value="active" selected>
+                Active
               </option>
-              <option value="active">Active</option>
               <option value="inactive">Inactive</option>
             </select>
             <input type="submit" value={username ? "Update" : "Save"} />
