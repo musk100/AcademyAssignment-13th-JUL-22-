@@ -46,7 +46,9 @@ const AdminLogin = () => {
             navigate("/user")
           }
           console.log(group)
-        } catch (e) {}
+        } catch (e) {
+          console.log("There was a problem")
+        }
         toast.success("Login Successful!", { autoClose: 1000 })
       } else if (response.data.login === false) {
         toast.error("Invalid Credentials!", { autoClose: 1000 })

@@ -10,6 +10,7 @@ import ChangePassword from "./pages/ChangePassword"
 import User from "./pages/User"
 import UserChangePassword from "./pages/UserChangePassword"
 import UserChangeEmail from "./pages/UserChangeEmail"
+import CreateUserGroup from "./pages/CreateUserGroup"
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route exact path="/mainmenu" element={<Home />} />
           <Route path="/" element={<AdminLogin />} />
           <Route path="/addUser" element={<AddEdit />} />
+          <Route path="/addUserGroup" element={<CreateUserGroup />} />
           <Route path="/update/:username" element={<View />} />
           <Route path="/changepassword" element={<ChangePassword />} />
           <Route path="/userchangepassword" element={<UserChangePassword />} />

@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt")
 const saltRounds = 4
 
 const update = function (app) {
-  //Edit User
+  /*Get all data from taskmanagement_db database and load on table to edit*/
   app.get("/api/get/:username", (request, response) => {
     const { username } = request.params
     const sqlGet = "SELECT * FROM taskmanagement_db WHERE username = ?"
@@ -15,7 +15,7 @@ const update = function (app) {
     })
   })
 
-  //Update User
+  /* Update Users email and status in admin account*/
   app.put("/api/update/:username", (request, response) => {
     const { username } = request.params
     const { email, usergroup, status } = request.body
@@ -32,6 +32,7 @@ const update = function (app) {
       console.log("Update Success!")
     })
   })
+  /*Update/Reset users password in admin account*/
   app.put("/api/updated/:username", (request, response) => {
     const { username } = request.params
     const { password } = request.body
@@ -48,6 +49,7 @@ const update = function (app) {
       })
     })
   })
+  /*update email in non-admin account*/
   app.put("/api/updates/:username", (request, response) => {
     const { username } = request.params
     const { email } = request.body
@@ -59,6 +61,21 @@ const update = function (app) {
       } else {
         console.log(result)
         console.log("Update Success!")
+      }
+    })
+  })
+
+  /*Add User to Group */
+  app.post("/api/postUsername", (request, response) => {
+    const { username, usergroup } = request.body
+    const groupStr = usergroup.toString()
+    console.log("group str", groupStr)
+    const sqlUpdate = "INSERT INTO usergroups (username, usergroup) VALUES (?, ?)"
+    connection.query(sqlUpdate, [username, groupStr], (error, result) => {
+      if (error) {
+        console.log(error)
+      } else {
+        console.log(result)
       }
     })
   })

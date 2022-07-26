@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import CreatableSelect from "react-select/creatable"
-import { useNavigate, useParams, Link } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import "./AddUser.module.css"
 import Axios from "axios"
 import { toast } from "react-toastify"
@@ -8,18 +8,14 @@ import makeAnimated from "react-select/animated"
 import Header from ".//Header"
 import "./View.css"
 
-// const initialState = {
-//   email: ""
-// }
-
 const View = () => {
   const animatedComponents = makeAnimated()
-  const Groups = ["admin", "project manager", "project lead", "team member", "devops", "General"]
   const [user, setUser] = useState("")
   const { username } = useParams()
   const [usergroup, setUserGroup] = useState([])
   const { email } = user
   const [status, setStatus] = useState("active")
+  const [dropdown, setDropdown] = useState([])
   const [selectedOption, setSelectedOption] = useState([])
 
   const handleStatus = e => {
@@ -29,7 +25,6 @@ const View = () => {
 
   const handleChange = selectedOption => {
     setSelectedOption(selectedOption)
-    //setUserGroup(selectedOption)
     console.log(selectedOption)
 
     selectedOption.forEach(option => {
@@ -43,6 +38,16 @@ const View = () => {
     const re = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
     return re.test(email)
   }
+
+  useEffect(() => {
+    const getGroup = async () => {
+      const response = await Axios.get("http://localhost:5000/api/getGrouping")
+      console.log(response)
+      setDropdown(response.data)
+    }
+    getGroup()
+  }, [])
+
   const handleSubmit = e => {
     e.preventDefault()
     if (!usergroup || !status) {
@@ -144,13 +149,13 @@ const View = () => {
             {
               <CreatableSelect
                 className="reactSelect"
-                options={Groups.map(data => {
-                  return { label: data, value: data }
+                options={dropdown.map(data => {
+                  return { label: data.usergroup, value: data.usergroup }
                 })}
                 components={animatedComponents}
                 onChange={handleChange}
                 isMulti
-                value={selectedOption}
+                defaultValue={selectedOption}
               />
             }
             <label htmlFor="status">Status</label>

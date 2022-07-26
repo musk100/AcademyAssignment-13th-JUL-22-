@@ -12,6 +12,7 @@ const login = async function (app) {
   app.use(cookieParser())
   app.use(bodyParser.urlencoded({ extended: true }))
 
+  /*get the data of User input on login page and validate if account is active or inactive */
   app.post("/login", (request, response) => {
     //login user
     const username = request.body.username
@@ -40,7 +41,7 @@ const login = async function (app) {
       }
     })
   })
-
+  /*Get user login status*/
   app.get("/login", (request, response) => {
     if (request.session.user) {
       response.send({ login: true, user: request.session.user })

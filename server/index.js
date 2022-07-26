@@ -4,9 +4,10 @@ const app = express()
 const cors = require("cors")
 
 const AddController = require("./Controllers/AddController")
-const CheckGroup = require("./Controllers/CheckGroup")
+const CheckGroupController = require("./Controllers/CheckGroupController")
 const LoginController = require("./Controllers/LoginController")
 const UpdateController = require("./Controllers/UpdateController")
+const AddGroupController = require("./Controllers/AddGroupController")
 
 app.use(express.json())
 
@@ -24,10 +25,12 @@ app.get("/api/get", (request, response) => {
   })
 })
 
+//call controller functions
 AddController(app)
-CheckGroup(app)
+CheckGroupController(app)
 LoginController(app)
 UpdateController(app)
+AddGroupController(app)
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000")

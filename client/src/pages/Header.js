@@ -15,13 +15,16 @@ const Header = () => {
       setActiveTab("AddUser")
     } else if (location.pathname === "/changepassword") {
       setActiveTab("ChangePassword")
+    } else if (location.pathname === "/addUserGroup") {
+      setActiveTab("CreateUserGroup")
+    } else if (location.pathname === "/addusertogroup") {
+      setActiveTab("AddUserToGroup")
     }
   }, [location])
 
   async function handleLogout(e) {
     localStorage.removeItem("login")
     localStorage.removeItem("username")
-    localStorage.removeItem("email")
     navigate("/")
   }
 
@@ -42,6 +45,16 @@ const Header = () => {
         <Link to="/changepassword">
           <p className={`${activeTab === "ChangePassword" ? "active" : ""}`} onClick={() => setActiveTab("ChangePassword")}>
             Change Password
+          </p>
+        </Link>
+        <Link to="/addUserGroup">
+          <p className={`${activeTab === "CreateUserGroup" ? "active" : ""}`} onClick={() => setActiveTab("CreateUserGroup")}>
+            Create UserGroup
+          </p>
+        </Link>
+        <Link to="/addusertogroup">
+          <p className={`${activeTab === "AddUserToGroup" ? "active" : ""}`} onClick={() => setActiveTab("AddUserToGroup")}>
+            Edit UserGroup
           </p>
         </Link>
         <Link to="/">

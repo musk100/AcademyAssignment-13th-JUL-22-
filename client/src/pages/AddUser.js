@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import CreatableSelect from "react-select/creatable"
-import { useNavigate, Link } from "react-router-dom"
+import { Link } from "react-router-dom"
 import "./AddUser.module.css"
 import Axios from "axios"
 import { toast } from "react-toastify"
@@ -9,29 +9,22 @@ import Header from ".//Header"
 
 const AddEdit = () => {
   const animatedComponents = makeAnimated()
-  const Groups = ["admin", "project manager", "project lead", "team member", "devops"]
+  const [usergroup, setUserGroup] = useState([])
+  const [dropdown, setDropdown] = useState([])
   const [state, setState] = useState("")
-  const [user, setUser] = useState("")
+  const [groups, setGroups] = useState("")
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const [usergroup, setUserGroup] = useState([])
-  const [status, setStatus] = useState("")
+  const [status, setStatus] = useState(["active"])
   const [selectedOption, setSelectedOption] = useState([])
-  const navigate = useNavigate()
   const handleStatus = e => {
     setStatus(e.target.value)
     console.log(e.target.value)
   }
 
-  function checkPassword(password) {
-    const re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,10}$/
-    return re.test(password)
-  }
-
   const handleChange = selectedOption => {
     setSelectedOption(selectedOption)
-    //setUserGroup(selectedOption)
     console.log(selectedOption)
 
     selectedOption.forEach(option => {
@@ -41,12 +34,16 @@ const AddEdit = () => {
     })
   }
 
+  function checkPassword(password) {
+    const re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,10}$/
+    return re.test(password)
+  }
   const handleSubmit = e => {
     e.preventDefault()
-    if (!username || !email || !password || !usergroup || !status) {
+    if (!username || !password || !status) {
       toast.error("Please provide value for each input field!", { autoClose: 1000 })
     } else {
-      Axios.post("http://localhost:5000/api/post", {
+      const userGrouping = Axios.post("http://localhost:5000/api/post", {
         username,
         email,
         password,
@@ -57,8 +54,19 @@ const AddEdit = () => {
           setState({ username: "", email: "", password: "", usergroup: [], status: "" })
         })
         .catch(err => toast.error(err.response.data))
+      if (userGrouping) {
+        const response = Axios.post("http://localhost:5000/api/postUsername", {
+          username,
+          usergroup
+        }).then(() => {
+          setGroups({ username: "", usergroup: [] })
+        })
+        if (response) {
+          toast.success("User successfully added to group", { autoClose: 1000 })
+        }
+      }
     }
-    if (username && password && email && usergroup && status) {
+    if (username && password && status) {
       if (checkPassword(password) === true) {
         toast.success("User Created Successfully!", { autoClose: 1000 })
         //clear all input values if create user is successful
@@ -74,8 +82,13 @@ const AddEdit = () => {
   }
 
   useEffect(() => {
-    Axios.get(`http://localhost:5000/api/get/${username}`).then(response => setUser({ ...response.data[0] }))
-  })
+    const getGroup = async () => {
+      const response = await Axios.get("http://localhost:5000/api/getGrouping")
+      console.log(response)
+      setDropdown(response.data)
+    }
+    getGroup()
+  }, [])
 
   return (
     <>
@@ -130,13 +143,14 @@ const AddEdit = () => {
           <label htmlFor="usergroup">User Group</label>
           {
             <CreatableSelect
-              options={Groups.map(data => {
-                return { label: data, value: data }
+              className="reactSelect"
+              options={dropdown.map(data => {
+                return { label: data.usergroup, value: data.usergroup }
               })}
               components={animatedComponents}
               onChange={handleChange}
               isMulti
-              value={selectedOption}
+              defaultValue={selectedOption}
             />
           }
           <label htmlFor="status">Status</label>
