@@ -48,8 +48,13 @@ const View = () => {
     getGroup()
   }, [])
 
+  useEffect(() => {
+    Axios.get(`http://localhost:5000/api/get/${username}`).then(response => setUser({ ...response.data[0] }))
+  }, [username])
+
   const handleSubmit = e => {
     e.preventDefault()
+    setUserGroup(null)
     if (!usergroup || !status) {
       toast.error("Please provide value for each input field!", { autoClose: 1000 })
     } else {
@@ -74,10 +79,6 @@ const View = () => {
       }
     }
   }
-
-  useEffect(() => {
-    Axios.get(`http://localhost:5000/api/get/${username}`).then(response => setUser({ ...response.data[0] }))
-  }, [username])
 
   return (
     <>
@@ -132,7 +133,7 @@ const View = () => {
               onChange={event => {
                 setUser({ ...user, username: event.target.value })
               }}
-              required
+              disabled
             />
             <label htmlFor="email">Email</label>
             <input

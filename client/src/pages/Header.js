@@ -17,8 +17,6 @@ const Header = () => {
       setActiveTab("ChangePassword")
     } else if (location.pathname === "/addUserGroup") {
       setActiveTab("CreateUserGroup")
-    } else if (location.pathname === "/addusertogroup") {
-      setActiveTab("AddUserToGroup")
     }
   }, [location])
 
@@ -50,11 +48,6 @@ const Header = () => {
         <Link to="/addUserGroup">
           <p className={`${activeTab === "CreateUserGroup" ? "active" : ""}`} onClick={() => setActiveTab("CreateUserGroup")}>
             Create UserGroup
-          </p>
-        </Link>
-        <Link to="/addusertogroup">
-          <p className={`${activeTab === "AddUserToGroup" ? "active" : ""}`} onClick={() => setActiveTab("AddUserToGroup")}>
-            Edit UserGroup
           </p>
         </Link>
         <Link to="/">

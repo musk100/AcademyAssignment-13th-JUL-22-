@@ -17,14 +17,32 @@ const Add = function (app) {
       connection.query(sqlInsert, [values], function (error, result) {
         if (error) {
           console.log(error.errno)
-        } else
+        } else {
+          console.log(groupStr.split(","))
+          usergroup.forEach(key => {
+            console.log(key)
+            const sqlUpdate = "INSERT INTO usergroups (username, usergroup) VALUES (?, ?)"
+            connection.query(sqlUpdate, [username, key], (error, result) => {
+              if (error) {
+                console.log(error)
+              } else {
+                console.log(result)
+              }
+            })
+          })
           response.send({
             message: "Table Data",
             result: result
           })
+        }
       })
     })
   })
+  /*Add User to Group */
+  // app.post("/api/postUsername", (request, response) => {
+  //   const { username, usergroup } = request.body
+  //   const groupStr = usergroup.toString()
+  // })
 }
 
 module.exports = Add

@@ -12,7 +12,6 @@ const AddEdit = () => {
   const [usergroup, setUserGroup] = useState([])
   const [dropdown, setDropdown] = useState([])
   const [state, setState] = useState("")
-  const [groups, setGroups] = useState("")
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -34,10 +33,19 @@ const AddEdit = () => {
     })
   }
 
+  //Validate email format
+  function checkEmail(email) {
+    const re = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i
+    return re.test(email)
+  }
+
+  //Check password to ensure addition of uppercase/lowercase characters, special characters and numbers in the password field
   function checkPassword(password) {
     const re = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,10}$/
     return re.test(password)
   }
+
+  //trigger function on submission of form
   const handleSubmit = e => {
     e.preventDefault()
     if (!username || !password || !status) {
@@ -54,17 +62,6 @@ const AddEdit = () => {
           setState({ username: "", email: "", password: "", usergroup: [], status: "" })
         })
         .catch(err => toast.error(err.response.data))
-      if (userGrouping) {
-        const response = Axios.post("http://localhost:5000/api/postUsername", {
-          username,
-          usergroup
-        }).then(() => {
-          setGroups({ username: "", usergroup: [] })
-        })
-        if (response) {
-          toast.success("User successfully added to group", { autoClose: 1000 })
-        }
-      }
     }
     if (username && password && status) {
       if (checkPassword(password) === true) {
@@ -73,14 +70,13 @@ const AddEdit = () => {
         setUsername("")
         setEmail("")
         setPassword("")
-        setSelectedOption("")
-        setStatus("")
       } else if (checkPassword(password) === false) {
         toast.error("Please include uppercase characters, special characters, numbers and alphabets in the password field", { autoClose: 2500 })
       }
     }
   }
 
+  //Load database values into dropdown list
   useEffect(() => {
     const getGroup = async () => {
       const response = await Axios.get("http://localhost:5000/api/getGrouping")

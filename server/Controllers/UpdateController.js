@@ -23,10 +23,22 @@ const update = function (app) {
     const groupStr = usergroup.toString()
     const sqlUpdate = "UPDATE taskmanagement_db SET email = ?, usergroup = ?, status = ? WHERE username = ?"
     connection.query(sqlUpdate, [email, groupStr, status, username], (error, result) => {
-      console.log(sqlUpdate)
       if (error) {
         console.log(error)
       } else {
+        console.log(groupStr.split(","))
+        usergroup.forEach(key => {
+          console.log(key)
+          console.log(username)
+          const sqlInsert = "INSERT INTO usergroups (username, usergroup) VALUES (?, ?)"
+          connection.query(sqlInsert, [username, key], (error, result) => {
+            if (error) {
+              console.log(error)
+            } else {
+              console.log(result)
+            }
+          })
+        })
         console.log(result)
       }
       console.log("Update Success!")
@@ -61,21 +73,6 @@ const update = function (app) {
       } else {
         console.log(result)
         console.log("Update Success!")
-      }
-    })
-  })
-
-  /*Add User to Group */
-  app.post("/api/postUsername", (request, response) => {
-    const { username, usergroup } = request.body
-    const groupStr = usergroup.toString()
-    console.log("group str", groupStr)
-    const sqlUpdate = "INSERT INTO usergroups (username, usergroup) VALUES (?, ?)"
-    connection.query(sqlUpdate, [username, groupStr], (error, result) => {
-      if (error) {
-        console.log(error)
-      } else {
-        console.log(result)
       }
     })
   })

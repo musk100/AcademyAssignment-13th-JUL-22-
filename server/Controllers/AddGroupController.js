@@ -4,8 +4,9 @@ const connection = require("../config/Database")
 const AddGroup = function (app) {
   app.post("/api/postGroup", (request, response) => {
     const { usergroup } = request.body
+    const groupStr = usergroup.toString()
     const sqlInsert = "INSERT INTO groupname (usergroup) VALUES (?)"
-    connection.query(sqlInsert, [usergroup], function (error, result) {
+    connection.query(sqlInsert, [groupStr], function (error, result) {
       console.log(result)
       if (error) {
         console.log(error)
