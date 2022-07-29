@@ -46,34 +46,53 @@ const AddEdit = () => {
   }
 
   //trigger function on submission of form
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
     if (!username || !password || !status) {
       toast.error("Please provide value for each input field!", { autoClose: 1000 })
     } else {
-      const userGrouping = Axios.post("http://localhost:5000/api/post", {
-        username,
-        email,
-        password,
-        usergroup,
-        status
+      const response = await Axios.post("http://localhost:5000/api/post", {
+        username: username,
+        email: email,
+        password: password,
+        usergroup: usergroup,
+        status: status
       })
-        .then(() => {
-          setState({ username: "", email: "", password: "", usergroup: [], status: "" })
-        })
-        .catch(err => toast.error(err.response.data))
-    }
-    if (username && password && status) {
-      if (checkPassword(password) === true) {
-        toast.success("User Created Successfully!", { autoClose: 1000 })
-        //clear all input values if create user is successful
+      const isDuplicate = response.data
+      if (username && password && status && isDuplicate !== false) {
+        if (checkPassword(password) === true) {
+          toast.success("User Created Successfully!", { autoClose: 1000 })
+          //clear all input values if create user is successful
+          setUsername("")
+          setEmail("")
+          setPassword("")
+          setSelectedOption(null)
+        } else if (checkPassword(password) === false) {
+          toast.error("Please include uppercase characters, special characters, numbers and alphabets in the password field", { autoClose: 2500 })
+        } else if (checkEmail(email) === false) {
+          toast.error("Please key in a correct email format")
+        }
+      } else {
+        toast.error("Duplicate User, please enter another username", { autoClose: 1000 })
         setUsername("")
         setEmail("")
         setPassword("")
-      } else if (checkPassword(password) === false) {
-        toast.error("Please include uppercase characters, special characters, numbers and alphabets in the password field", { autoClose: 2500 })
       }
     }
+    // if (username && password && status && !isDuplicate) {
+    //   if (checkPassword(password) === true) {
+    //     toast.success("User Created Successfully!", { autoClose: 1000 })
+    //     //clear all input values if create user is successful
+    //     setUsername("")
+    //     setEmail("")
+    //     setPassword("")
+    //     setSelectedOption(null)
+    //   } else if (checkPassword(password) === false) {
+    //     toast.error("Please include uppercase characters, special characters, numbers and alphabets in the password field", { autoClose: 2500 })
+    //   } else if (checkEmail(email) === false) {
+    //     toast.error("Please key in a correct email format")
+    //   }
+    // }
   }
 
   //Load database values into dropdown list

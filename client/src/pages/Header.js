@@ -28,7 +28,7 @@ const Header = () => {
 
   return (
     <div className="header">
-      <p className="logo">User Management System</p>
+      <p className="logo">Task Management System</p>
       <div className="header-right">
         <Link to="/mainmenu">
           <p className={`${activeTab === "Home" ? "active" : ""}`} onClick={() => setActiveTab("Home")}>

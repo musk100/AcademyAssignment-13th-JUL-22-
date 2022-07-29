@@ -46,17 +46,19 @@ const update = function (app) {
   })
   /*Update/Reset users password in admin account*/
   app.put("/api/updated/:username", (request, response) => {
-    const { username } = request.params
-    const { password } = request.body
+    const { username, password } = request.body
     console.log(request.body)
+    const sqlInput = "SELECT username FROM taskmanagement_db WHERE username = ?"
+    connection.query(sqlInput, [username], (error, result) => {
+      if (result.length < 0) {
+        console.log("User not found")
+      }
+    })
     const sqlUpdate = "UPDATE taskmanagement_db SET password = ? WHERE username = ?"
     bcrypt.hash(password, saltRounds, function (err, hash) {
       connection.query(sqlUpdate, [hash, username], (error, result) => {
         if (error) {
           console.log(error)
-        } else {
-          console.log(result)
-          console.log("Update Success!")
         }
       })
     })

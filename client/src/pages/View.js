@@ -54,7 +54,7 @@ const View = () => {
 
   const handleSubmit = e => {
     e.preventDefault()
-    setUserGroup(null)
+
     if (!usergroup || !status) {
       toast.error("Please provide value for each input field!", { autoClose: 1000 })
     } else {
@@ -74,9 +74,9 @@ const View = () => {
         //clear all input values if update user is successful
         setSelectedOption("")
         setStatus("")
-      } else if (checkEmail(email) === false) {
-        toast.error("Please key in a correct email format")
-      }
+      } // else if (checkEmail(email) === false) {
+      //   toast.error("Please key in a correct email format")
+      // }
     }
   }
 
