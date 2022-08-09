@@ -52,7 +52,7 @@ const Add = function (app) {
   app.get("/api/getDuplicate", (request, response) => {
     const username = request.body
     const sqlData = "SELECT username FROM taskmanagement_db WHERE username = ?"
-    connection.query(sqlData, (error, result) => {
+    connection.query(sqlData, [username], (error, result) => {
       if (error) throw error
       else {
         console.log(result)

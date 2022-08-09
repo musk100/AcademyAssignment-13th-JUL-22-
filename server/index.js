@@ -8,6 +8,8 @@ const CheckGroupController = require("./Controllers/CheckGroupController")
 const LoginController = require("./Controllers/LoginController")
 const UpdateController = require("./Controllers/UpdateController")
 const AddGroupController = require("./Controllers/AddGroupController")
+const GetApplication = require("./Controllers/GetApplication")
+const GetPlan = require("./Controllers/Plan")
 
 app.use(express.json())
 
@@ -31,6 +33,8 @@ CheckGroupController(app)
 LoginController(app)
 UpdateController(app)
 AddGroupController(app)
+GetApplication(app)
+GetPlan(app)
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000")
