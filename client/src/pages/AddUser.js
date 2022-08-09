@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from "react"
 import CreatableSelect from "react-select/creatable"
 import { Link } from "react-router-dom"
-import "./AddUser.module.css"
 import Axios from "axios"
 import { toast } from "react-toastify"
 import makeAnimated from "react-select/animated"
 import Header from ".//Header"
+import "./AddUser.module.css"
 
 const AddEdit = () => {
   const animatedComponents = makeAnimated()
   const [usergroup, setUserGroup] = useState([])
   const [dropdown, setDropdown] = useState([])
-  const [state, setState] = useState("")
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -79,20 +78,6 @@ const AddEdit = () => {
         setPassword("")
       }
     }
-    // if (username && password && status && !isDuplicate) {
-    //   if (checkPassword(password) === true) {
-    //     toast.success("User Created Successfully!", { autoClose: 1000 })
-    //     //clear all input values if create user is successful
-    //     setUsername("")
-    //     setEmail("")
-    //     setPassword("")
-    //     setSelectedOption(null)
-    //   } else if (checkPassword(password) === false) {
-    //     toast.error("Please include uppercase characters, special characters, numbers and alphabets in the password field", { autoClose: 2500 })
-    //   } else if (checkEmail(email) === false) {
-    //     toast.error("Please key in a correct email format")
-    //   }
-    // }
   }
 
   //Load database values into dropdown list

@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
+import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
 import AddEdit from "./pages/AddUser"
 import Home from "./pages/Home"
@@ -11,6 +12,8 @@ import User from "./pages/User"
 import UserChangePassword from "./pages/UserChangePassword"
 import UserChangeEmail from "./pages/UserChangeEmail"
 import CreateUserGroup from "./pages/CreateUserGroup"
+import Application from "./pages/Application"
+import TaskPage from "./pages/TaskPage"
 
 function App() {
   return (
@@ -18,7 +21,9 @@ function App() {
       <div className="App">
         <ToastContainer position="top-center" />
         <Routes>
-          <Route exact path="/mainmenu" element={<Home />} />
+          <Route exact path="/application" element={<Application />} />
+          <Route path="/taskpage/:App_Acronym" element={<TaskPage />} />
+          <Route path="/mainmenu" element={<Home />} />
           <Route path="/" element={<AdminLogin />} />
           <Route path="/addUser" element={<AddEdit />} />
           <Route path="/addUserGroup" element={<CreateUserGroup />} />

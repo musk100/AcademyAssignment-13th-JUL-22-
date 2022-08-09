@@ -6,9 +6,6 @@ import Header from ".//Header"
 
 const Home = () => {
   const [data, setData] = useState([])
-  useEffect(() => {
-    loadData()
-  }, [])
 
   //fetch all data from API
   const loadData = async () => {
@@ -16,6 +13,10 @@ const Home = () => {
     setData(response.data)
   }
 
+  useEffect(() => {
+    loadData()
+  }, [])
+  
   return (
     <>
       <Header />

@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 import { Form, Button } from "react-bootstrap"
 import { useNavigate } from "react-router-dom"
-import "./AdminLogin.css"
 import Axios from "axios"
 import { toast } from "react-toastify"
+import "./AdminLogin.css"
 
 const AdminLogin = () => {
   const [username, setUsername] = useState("")
@@ -41,7 +41,7 @@ const AdminLogin = () => {
           //if user is admin, navigate to admin page
           const isAdmin = group.data
           if (isAdmin === true) {
-            navigate("/mainmenu")
+            navigate("/application")
           } else {
             navigate("/user")
           }
