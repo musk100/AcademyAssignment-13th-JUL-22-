@@ -11,9 +11,21 @@ const getApplication = function (app) {
     })
   })
 
+  app.get("/api/getApplicationDetails", (request, response) => {
+    const sqlGets = `SELECT *, DATE_FORMAT(App_startDate, "%Y-%m-%d") as startDate, DATE_FORMAT(App_endDate, "%Y-%m-%d") as endDate  FROM application`
+    connection.query(sqlGets, (error, result) => {
+      if (error) {
+        console.log(error)
+      } else {
+        response.send(result)
+      }
+    })
+  })
+
+
   app.get("/api/getApplicationDetails/:App_Acronym", (request, response) => {
     const { App_Acronym } = request.params
-    const sqlGets = "SELECT * FROM application WHERE App_Acronym = ?"
+    const sqlGets = `SELECT *, DATE_FORMAT(App_startDate, "%Y-%m-%d") as startDate, DATE_FORMAT(App_endDate, "%Y-%m-%d") as endDate  FROM application WHERE App_Acronym = ?`
     connection.query(sqlGets, [App_Acronym], (error, result) => {
       if (error) {
         console.log(error)
@@ -45,7 +57,7 @@ const getApplication = function (app) {
         const sqlInsert = "INSERT INTO application (App_Acronym, App_Description, App_Rnumber, App_startDate, App_endDate, App_permit_Create, App_permit_Open, App_permit_toDoList, App_permit_Doing, App_permit_Done) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
         connection.query(sqlInsert, [app_Acronym, app_Desc, app_Rno, app_Start, app_End, app_Create, app_Open, app_ToDo, app_Doing, app_Done], function (error, result) {
           if (error) {
-            console.log("There was a problem")
+            console.log(error)
           } else {
             response.send(true)
             console.log(result)
@@ -58,18 +70,16 @@ const getApplication = function (app) {
   })
 
   app.put("/api/updateApplication/:App_Acronym", (request, response) => {
-    const { app_Acronym } = request.params
+    const {App_Acronym } = request.params
     const { app_Desc, app_Rno, app_Create, app_Open, app_ToDo, app_Doing, app_Done } = request.body
     let { app_Start } = request.body
     let { app_End } = request.body
-    console.log(request.body)
     const sqlUpdate = "UPDATE application SET App_Description = ?, App_Rnumber = ?, App_startDate = ?, App_endDate = ?, App_permit_Create = ?, App_permit_Open = ?, App_permit_toDoList = ?, App_permit_Doing = ?, App_permit_Done = ? WHERE App_Acronym = ?"
-    connection.query(sqlUpdate, [app_Desc, app_Rno, app_Start, app_End, app_Create, app_Open, app_ToDo, app_Doing, app_Done, app_Acronym], (error, result) => {
-      if (app_Acronym || app_Desc || app_Rno === "") {
-        console.log("Please fill in required fields before updating!")
+    connection.query(sqlUpdate, [app_Desc, app_Rno, app_Start, app_End, app_Create, app_Open, app_ToDo, app_Doing, app_Done, App_Acronym], (error, result) => {
+      if (error) {
+        console.log(error)
       } else {
         response.send(result)
-        console.log(result)
       }
     })
   })

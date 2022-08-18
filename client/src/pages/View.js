@@ -167,7 +167,7 @@ const View = () => {
               <option value="inactive">Inactive</option>
             </select>
             <input type="submit" value={username ? "Update" : "Save"} />
-            <Link to="/mainMenu">
+            <Link to="/mainmenu">
               <input type="button" value="Go Back" />
             </Link>
           </form>

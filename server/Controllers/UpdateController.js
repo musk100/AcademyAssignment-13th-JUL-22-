@@ -10,8 +10,9 @@ const update = function (app) {
     connection.query(sqlGet, [username], (error, result) => {
       if (error) {
         console.log(error)
+      } else {
+        response.send(result)
       }
-      response.send(result)
     })
   })
 
@@ -35,11 +36,10 @@ const update = function (app) {
             if (error) {
               console.log(error)
             } else {
-              console.log(result)
+              response.send(result)
             }
           })
         })
-        console.log(result)
       }
       console.log("Update Success!")
     })
@@ -73,7 +73,7 @@ const update = function (app) {
       if (error) {
         console.log(error)
       } else {
-        console.log(result)
+        response.send(result)
         console.log("Update Success!")
       }
     })

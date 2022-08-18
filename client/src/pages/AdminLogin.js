@@ -43,7 +43,7 @@ const AdminLogin = () => {
           if (isAdmin === true) {
             navigate("/application")
           } else {
-            navigate("/user")
+            navigate("/application")
           }
           console.log(group)
         } catch (e) {

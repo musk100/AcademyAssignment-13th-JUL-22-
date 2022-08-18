@@ -10,6 +10,8 @@ const UpdateController = require("./Controllers/UpdateController")
 const AddGroupController = require("./Controllers/AddGroupController")
 const GetApplication = require("./Controllers/GetApplication")
 const GetPlan = require("./Controllers/Plan")
+const GetTask = require("./Controllers/Task")
+const Tasked = require("./restAPI/CreateTask")
 
 app.use(express.json())
 
@@ -35,6 +37,8 @@ UpdateController(app)
 AddGroupController(app)
 GetApplication(app)
 GetPlan(app)
+GetTask(app)
+Tasked(app)
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000")

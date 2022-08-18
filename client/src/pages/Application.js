@@ -11,12 +11,11 @@ import Col from "react-bootstrap/Col"
 import Row from "react-bootstrap/Row"
 import Form from "react-bootstrap/Form"
 import Modal from "react-bootstrap/Modal"
-import { Navigation, Edit } from "react-feather"
+import { Navigation } from "react-feather"
 import "./Application.css"
 
 const Application = () => {
   const [appAcronym, setAppAcronym] = useState("")
-  const { appAcronyms } = useParams()
   const [appDesc, setAppDesc] = useState("")
   const [appRno, setAppRno] = useState("")
   const [appStart, setAppStart] = useState("")
@@ -28,6 +27,8 @@ const Application = () => {
   const [appDone, setAppDone] = useState()
   const [dropdown, setDropdown] = useState([])
   const [userData, setUserData] = useState([])
+  const [groupNameData, setGroupNameData] = useState("")
+  const [isProjectLead, setIsProjectLead] = useState(false)
 
   const [selectedOption, setSelectedOption] = useState()
   const [selectedOption1, setSelectedOption1] = useState()
@@ -37,9 +38,9 @@ const Application = () => {
 
   const [show, setShow] = useState(false)
   const [unshow, setUnShow] = useState(false)
+  const [user, setUser] = useState("")
 
   const handleShow = () => setShow(true)
-  const handleUnShow = () => setUnShow(true)
 
   const handleClose = () => {
     setShow(false)
@@ -141,29 +142,24 @@ const Application = () => {
     }
   }
 
-  const handleSubmits = e => {
-    e.preventDefault()
-    if (!appAcronym || appDesc || !appRno) {
-      toast.error("Please fill up required fields before updating!", { autoClose: 1000 })
-    } else {
-      Axios.put(`http://localhost:5000/api/updateApplication/${appAcronyms}`, {
-        app_Desc: appDesc,
-        app_Rno: appRno,
-        app_Start: appStart,
-        app_End: appEnd,
-        app_Create: appCreate,
-        app_Open: appOpen,
-        app_ToDo: appToDo,
-        app_Doing: appDoing,
-        app_Done: appDone
-      }).catch(e => {
-        console.log(e)
+  let username = localStorage.getItem("username")
+  const makeRequest = async () => {
+    try {
+      console.log(username)
+      const response = await Axios.post("http://localhost:5000/api/getTaskGroup", {
+        username
       })
-      if (appAcronym && appRno && appDesc !== "") {
-        toast.success("Application Updated!", { autoClose: 1000 })
-      } 
+      console.log(response.data.groupname)
+      setGroupNameData(response.data.groupname)
+      setIsProjectLead(username)
+    } catch (error) {
+      console.log(error)
     }
   }
+
+  useEffect(() => {
+    makeRequest()
+  }, [])
 
   useEffect(() => {
     const getApp = async () => {
@@ -184,16 +180,22 @@ const Application = () => {
     getGroup()
   }, [])
 
+  useEffect(() => {
+    Axios.get("http://localhost:5000/api/getApplicationDetails").then(response => setUser({ ...response.data[0] }))
+  }, [])
+
   return (
     <>
       <Header />
       <div style={{ marginTop: "50px" }}>
         <h2>Application</h2>
+        {groupNameData.includes("project lead") ? (
         <div className="border d-flex align-items-center justify-content-center">
           <Button variant="primary" onClick={handleShow}>
             Add Application
           </Button>
         </div>
+         ) : null}
         <Container>
           <Row>
             {userData.map((userData, k) => (
@@ -202,17 +204,14 @@ const Application = () => {
                   <Card.Body>
                     <Card.Title style={{ display: "flex" }}>
                       {userData.App_Acronym}
-                      <a className="nav-links" onClick={handleUnShow}>
-                        <Edit />
-                      </a>
                       <Link to={`/taskpage/${userData.App_Acronym}`}>
-                        <a className="nav-link">
+                        <a className="nav-linked">
                           <Navigation />
                         </a>
                       </Link>
                     </Card.Title>
                     <Card.Subtitle>Running Number: {userData.App_Rnumber}</Card.Subtitle>
-                    <Card.Text>{userData.App_Description}</Card.Text>
+                    <Card.Text className="line-ellipsis">{userData.App_Description}</Card.Text>
                   </Card.Body>
                 </Card>
               </Col>
@@ -228,7 +227,7 @@ const Application = () => {
               <Row className="mb-3">
                 <Form.Group as={Col} controlId="formGridAppAcronym">
                   <Form.Label>App Acronym</Form.Label>
-                  <Form.Control
+                  <Form.Control style={{backgroundColor: "white"}}
                     type="text"
                     placeholder="App name..."
                     autoFocus
@@ -236,12 +235,11 @@ const Application = () => {
                     onChange={e => {
                       setAppAcronym(e.target.value)
                     }}
-                    disabled
                   />
                 </Form.Group>
-                <Form.Group as={Col} controlId="formGridRunningNumber">
-                  <Form.Label>App Running Number</Form.Label>
-                  <Form.Control
+                <Form.Group as={Col} controlId="formGridRunningNumber" style={{marginTop: "0px"}}>
+                  <Form.Label style={{marginBottom:"15px"}}>App Running Number</Form.Label>
+                  <Form.Control style={{height: "48px"}}
                     type="number"
                     placeholder="Running Number..."
                     value={appRno}
@@ -355,144 +353,6 @@ const Application = () => {
             </Button>
             <Button variant="primary" onClick={handleSubmit}>
               Create
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        <Modal size="xl" show={unshow} onHide={handleUnClose} centered>
-          <Modal.Header closeButton>
-            <Modal.Title>Update Application</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form style={{ borderRadius: "100%" }}>
-              <Row className="mb-3">
-                <Form.Group as={Col} controlId="formGridAppAcronym">
-                  <Form.Label>App Acronym</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="App name..."
-                    autoFocus
-                    value={appAcronym}
-                    onChange={e => {
-                      setAppAcronym(e.target.value)
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group as={Col} controlId="formGridRunningNumber">
-                  <Form.Label>App Running Number</Form.Label>
-                  <Form.Control
-                    type="number"
-                    placeholder="Running Number..."
-                    value={appRno}
-                    onChange={e => {
-                      setAppRno(e.target.value)
-                    }}
-                  />
-                </Form.Group>
-              </Row>
-              <Form.Group as={Col} className="mb-4" controlId="exampleForm.ControlTextarea1">
-                <Form.Label>App Description</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  placeholder="App Description..."
-                  rows={3}
-                  value={appDesc}
-                  onChange={e => {
-                    setAppDesc(e.target.value)
-                  }}
-                />
-              </Form.Group>
-              <Row className="mb-3">
-                <Form.Group as={Col} controlD="formGridStart">
-                  <Form.Label>App Start Date</Form.Label>
-                  <Form.Control
-                    className="input1"
-                    type="date"
-                    value={appStart}
-                    onChange={e => {
-                      setAppStart(e.target.value)
-                    }}
-                  />
-                </Form.Group>
-                <Form.Group as={Col} controlID="formGridEnd">
-                  <Form.Label>App End Date</Form.Label>
-                  <Form.Control
-                    className="input2"
-                    type="date"
-                    value={appEnd}
-                    onChange={e => {
-                      setAppEnd(e.target.value)
-                    }}
-                  />
-                </Form.Group>
-              </Row>
-              <Row className="mb-3">
-                <Form.Group as={Col} controlId="formGridOpen">
-                  <Form.Label>App Permit Create</Form.Label>
-                  <Select
-                    className="reactSelect"
-                    options={dropdown.map(data => {
-                      return { label: data.usergroup, value: data.usergroup }
-                    })}
-                    onChange={handleChange}
-                    value={selectedOption}
-                  />
-                </Form.Group>
-                <Form.Group as={Col} controlId="formGridOpen">
-                  <Form.Label>App Permit Open</Form.Label>
-                  <Select
-                    className="reactSelect"
-                    options={dropdown.map(data => {
-                      return { label: data.usergroup, value: data.usergroup }
-                    })}
-                    onChange={handleChange1}
-                    value={selectedOption1}
-                  />
-                </Form.Group>
-
-                <Form.Group as={Col} controlId="formGridToDo">
-                  <Form.Label>App Permit ToDo</Form.Label>
-                  <Select
-                    className="reactSelect"
-                    options={dropdown.map(data => {
-                      return { label: data.usergroup, value: data.usergroup }
-                    })}
-                    onChange={handleChange2}
-                    value={selectedOption2}
-                  />
-                </Form.Group>
-
-                <Form.Group as={Col} controlId="formGridDoing">
-                  <Form.Label>App Permit Doing</Form.Label>
-                  <Select
-                    className="reactSelect"
-                    options={dropdown.map(data => {
-                      return { label: data.usergroup, value: data.usergroup }
-                    })}
-                    onChange={handleChange3}
-                    value={selectedOption3}
-                  />
-                </Form.Group>
-
-                <Form.Group as={Col} controlId="formGridDone">
-                  <Form.Label>App Permit Done</Form.Label>
-                  <Select
-                    className="reactSelect"
-                    options={dropdown.map(data => {
-                      return { label: data.usergroup, value: data.usergroup }
-                    })}
-                    onChange={handleChange4}
-                    value={selectedOption4}
-                  />
-                </Form.Group>
-              </Row>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleUnClose}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={handleSubmits}>
-              Update
             </Button>
           </Modal.Footer>
         </Modal>

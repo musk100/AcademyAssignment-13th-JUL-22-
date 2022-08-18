@@ -13,14 +13,10 @@ input[type="text"] {
   height: 45px;
 }
 
-a.nav-link {
+a.nav-linked {
   position: absolute;
-  top: 14px;
-  right: 14px;
+  top: 12px;
+  right: 20px;
 }
 
-a.nav-links {
-  position: absolute;
-  top: 14px;
-  right: 45px;
-}
+

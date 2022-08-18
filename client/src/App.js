@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { ToastContainer } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 import "bootstrap/dist/css/bootstrap.min.css"
-import "./App.css"
 import AddEdit from "./pages/AddUser"
 import Home from "./pages/Home"
 import AdminLogin from "./pages/AdminLogin"
@@ -14,6 +13,8 @@ import UserChangeEmail from "./pages/UserChangeEmail"
 import CreateUserGroup from "./pages/CreateUserGroup"
 import Application from "./pages/Application"
 import TaskPage from "./pages/TaskPage"
+import TaskEdit from "./pages/TaskEdit"
+import TaskView from "./pages/TaskView"
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
         <ToastContainer position="top-center" />
         <Routes>
           <Route exact path="/application" element={<Application />} />
+          <Route path="/taskedit/:Task_name" element={<TaskEdit/>} />
+          <Route path="/view/:Task_name" element={<TaskView/>} />
           <Route path="/taskpage/:App_Acronym" element={<TaskPage />} />
           <Route path="/mainmenu" element={<Home />} />
           <Route path="/" element={<AdminLogin />} />
