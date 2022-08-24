@@ -24,7 +24,7 @@ const login = async function (app) {
         return
       }
       if (!result.length) {
-        console.log("Invalid Credentials!")
+        console.log("Invalid Credentials")
         response.send({ login: false })
         return
       }
@@ -41,15 +41,6 @@ const login = async function (app) {
       }
     })
   })
-  /*Get user login status*/
-  // app.get("/login", (request, response) => {
-  //   if (request.session.user) {
-  //     response.send({ login: true, user: request.session.user })
-  //     console.log(result)
-  //   } else {
-  //     response.send({ login: false })
-  //   }
-  // })
 }
 AddController(app)
 module.exports = login

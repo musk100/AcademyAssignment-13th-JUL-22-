@@ -9,11 +9,9 @@ const Checkgroup = function (app) {
       if (error) {
         console.log(error)
       }
-      // console.log(result.user)
-      else if (result[0].usergroup === "admin") {
-        response.send(true)
-      } else {
-        response.send(false)
+     else {
+      let groupname = result[0].usergroup
+      response.send(JSON.stringify({ groupname }))
       }
     })
   })

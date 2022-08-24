@@ -3,7 +3,7 @@ const nodemailer = require("nodemailer")
 
 const getTask = function (app) {
   app.get("/api/getTask", (request, response) => {
-    const {App_Acronym} = request.query
+    const { App_Acronym } = request.query
     const sqlGet = `SELECT *, DATE_FORMAT(Task_createDate, "%d/%m/%Y (%a) %H:%i") as createDate FROM task where Task_app_Acronym = ? order by Task_createDate desc`
     connection.query(sqlGet, [App_Acronym], (error, result) => {
       if (error) {
@@ -164,8 +164,7 @@ const getTask = function (app) {
                 connection.query(sqlInsert, [Task_name, Task_description, task_Notes, Task_id, task_Plan, App_Acronym, task_State, isProjectLead, task_Owner, task_CreateDate], (error, result) => {
                   if (error) {
                     console.log(error)
-                  }
-                  else {
+                  } else {
                     response.send(result)
                     const sqlUpdate = "UPDATE application SET App_Rnumber = ? WHERE App_Acronym = ?"
                     connection.query(sqlUpdate, [app_Rno, App_Acronym], (error, result) => {

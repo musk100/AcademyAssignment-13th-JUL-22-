@@ -11,7 +11,11 @@ const AddGroupController = require("./Controllers/AddGroupController")
 const GetApplication = require("./Controllers/GetApplication")
 const GetPlan = require("./Controllers/Plan")
 const GetTask = require("./Controllers/Task")
-const Tasked = require("./restAPI/CreateTask")
+
+/* ASSIGNMENT 3 */
+const { CreateTaskAPI } = require("./restAPI/CreateTask")
+// const { GetTaskbyStateAPI } = require("../rest-api/GetTaskbyState")
+// const { PromoteTask2DoneAPI } = require("../rest-api/PromoteTaskToDone")
 
 app.use(express.json())
 
@@ -38,7 +42,11 @@ AddGroupController(app)
 GetApplication(app)
 GetPlan(app)
 GetTask(app)
-Tasked(app)
+
+/* ASSIGNMENT 3 */
+app.route ("/CreateTask").post(CreateTaskAPI)
+// app.route("/GetTaskbyState").get(GetTaskbyStateAPI)
+// app.route("/PromoteTask2Done").post(PromoteTask2DoneAPI)
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000")
