@@ -8,6 +8,13 @@ const saltRounds = 10
 const bcrypt = require("bcrypt")
 
 const Add = function (app) {
+  app.get("/api/get", (request, response) => {
+    const sqlGet = "SELECT * FROM taskmanagement_db"
+    connection.query(sqlGet, (error, result) => {
+      response.send(result)
+    })
+  })
+  
   app.post("/api/post", (request, response) => {
     const { username, email, password, usergroup, status } = request.body
     const sqlData = "SELECT username FROM taskmanagement_db WHERE username = ?"

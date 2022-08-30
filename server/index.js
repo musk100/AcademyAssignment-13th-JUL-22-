@@ -1,5 +1,4 @@
 const express = require("express")
-const connection = require("./config/Database")
 const app = express()
 const cors = require("cors")
 
@@ -13,9 +12,9 @@ const GetPlan = require("./Controllers/Plan")
 const GetTask = require("./Controllers/Task")
 
 /* ASSIGNMENT 3 */
-const { CreateTaskAPI } = require("./restAPI/CreateTask")
-// const { GetTaskbyStateAPI } = require("../rest-api/GetTaskbyState")
-// const { PromoteTask2DoneAPI } = require("../rest-api/PromoteTaskToDone")
+const CreatedTaskAPI = require("./restAPI/CreatedTask")
+const TaskStateAPI = require("./restAPI/GetTaskbyState")
+const PromoteTaskAPI = require("./restAPI/PromoteTask2Done")
 
 app.use(express.json())
 
@@ -26,14 +25,9 @@ app.use(
   })
 )
 
-app.get("/api/get", (request, response) => {
-  const sqlGet = "SELECT * FROM taskmanagement_db"
-  connection.query(sqlGet, (error, result) => {
-    response.send(result)
-  })
-})
 
-//call controller functions
+
+//routes
 AddController(app)
 CheckGroupController(app)
 LoginController(app)
@@ -44,9 +38,13 @@ GetPlan(app)
 GetTask(app)
 
 /* ASSIGNMENT 3 */
-app.route ("/CreateTask").post(CreateTaskAPI)
-// app.route("/GetTaskbyState").get(GetTaskbyStateAPI)
-// app.route("/PromoteTask2Done").post(PromoteTask2DoneAPI)
+CreatedTaskAPI(app)
+TaskStateAPI(app)
+PromoteTaskAPI(app)
+
+app.use("*", function checkroute(req, res) {
+  res.send({ code: 4004 })
+})
 
 app.listen(5000, () => {
   console.log("Server is running on port 5000")
