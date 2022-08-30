@@ -366,7 +366,7 @@ const TaskPage = () => {
                           const postTask = async () => {
                             const response = await Axios.put("http://localhost:5000/api/postState", {
                               task_Name: filteredData.Task_name,
-                              newState: "ToDo",
+                              newState: "To Do",
                               currentState: "Open",
                               task_Owner: username
                             })
@@ -428,13 +428,13 @@ const TaskPage = () => {
                   <Card.Body>
                     <Row xs={1} md={1} lg={1} xl={1}>
                       {data
-                        .filter(data => data.Task_state == "ToDo")
+                        .filter(data => data.Task_state == "To Do")
                         .map(filteredData => {
                           const postTasks = async () => {
                             const response = await Axios.put("http://localhost:5000/api/postState", {
                               task_Name: filteredData.Task_name,
                               newState: "Doing",
-                              currentState: "ToDo",
+                              currentState: "To Do",
                               task_Owner: username
                             })
                             if (!response.data.error) {
@@ -500,7 +500,7 @@ const TaskPage = () => {
                           const postTask = async () => {
                             const response = await Axios.put("http://localhost:5000/api/postState", {
                               task_Name: filteredData.Task_name,
-                              newState: "ToDo",
+                              newState: "To Do",
                               currentState: "Doing",
                               task_Owner: username
                             })
@@ -604,7 +604,7 @@ const TaskPage = () => {
                           const postTasks = async () => {
                             const response = await Axios.put("http://localhost:5000/api/postState", {
                               task_Name: filteredData.Task_name,
-                              newState: "Closed",
+                              newState: "Close",
                               currentState: "Done",
                               task_Owner: username
                             })
@@ -678,7 +678,7 @@ const TaskPage = () => {
                   <Card.Body>
                     <Row xs={1} md={1} lg={1} xl={1}>
                       {data
-                        .filter(data => data.Task_state == "Closed")
+                        .filter(data => data.Task_state == "Close")
                         .map(filteredData => {
                           return (
                             <Col>
